@@ -1,18 +1,21 @@
 body {
   font-family: sans-serif;
-  padding: 20px;
   background: #f4e8d4;
+  padding: 20px;
+}
+.tabs button {
+  margin: 4px;
 }
 .tabContent {
   display: none;
   margin-top: 1em;
-}
-.tabs button {
-  margin-right: 5px;
 }
 button:disabled {
   opacity: 0.5;
 }
 select {
   margin-bottom: 10px;
+}
+h2, h3 {
+  margin-top: 1.5em;
 }
