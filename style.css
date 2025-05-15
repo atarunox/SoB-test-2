@@ -19,3 +19,15 @@ select {
 h2, h3 {
   margin-top: 1.5em;
 }
+.panel {
+  background: #fffbe6;
+  padding: 10px;
+  border: 1px solid #ccc;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  cursor: move;
+}
+.panel h3 {
+  margin: 0 0 0.5em 0;
+  cursor: grab;
+}
