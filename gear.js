@@ -1,7 +1,7 @@
 export const gearList = [
   // Head
   { id: "sturdy_hat", name: "Sturdy Hat", slot: "Head", effects: { Defense: 1 } },
-  { id: "tinker_goggles", name: "Tinkerâ€™s Goggles", slot: "Head", effects: { Lore: 1, Cunning: 1 }, darkStone: false },
+  { id: "tinker_goggles", name: "Tinker’s Goggles", slot: "Head", effects: { Lore: 1, Cunning: 1 }, darkStone: false },
 
   // Torso
   { id: "leather_vest", name: "Leather Vest", slot: "Torso", effects: { Willpower: 1 } },
@@ -13,7 +13,7 @@ export const gearList = [
 
   // Gloves
   { id: "brass_knuckles", name: "Brass Knuckles", slot: "Gloves", effects: { Strength: 1 } },
-  { id: "alchemists_gloves", name: "Alchemistâ€™s Gloves", slot: "Gloves", effects: { Cunning: 1, Luck: 1 } },
+  { id: "alchemists_gloves", name: "Alchemist’s Gloves", slot: "Gloves", effects: { Cunning: 1, Luck: 1 } },
 
   // Hands
   { id: "steel_blade", name: "Steel Blade", slot: "Hands", effects: { Combat: 1 }, twoHanded: false },
