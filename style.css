@@ -3,31 +3,44 @@ body {
   background: #f4e8d4;
   padding: 20px;
 }
+
 .tabs button {
   margin: 4px;
 }
+
 .tabContent {
   display: none;
   margin-top: 1em;
 }
+
 button:disabled {
   opacity: 0.5;
 }
+
 select {
   margin-bottom: 10px;
 }
+
 h2, h3 {
-  margin-top: 1.5em;
+  margin-top: 1.2em;
 }
+
 .panel {
   background: #fffbe6;
-  padding: 10px;
+  padding: 12px;
   border: 1px solid #ccc;
-  margin-bottom: 10px;
-  border-radius: 5px;
-  cursor: move;
+  margin-bottom: 12px;
+  border-radius: 6px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
+
 .panel h3 {
   margin: 0 0 0.5em 0;
   cursor: grab;
+  font-size: 1.1em;
+}
+
+.dragging {
+  opacity: 0.7;
+  background: #f0e5c8;
 }
