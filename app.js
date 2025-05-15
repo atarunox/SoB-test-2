@@ -1,24 +1,26 @@
+// Shadows of Brimstone Hero Tracker - Full app.js
 import { gearList } from './gear.js';
 import { skillTree } from './skills.js';
 import { hexcrawlConditions } from './conditions.js';
 
-let inventory = [...gearList];
 let equipped = {};
 let selectedSkills = [];
-let conditions = { Mutations: [], Injuries: [], Madness: [] };
 let useHexcrawl = true;
-
+let conditions = { Mutations: [], Injuries: [], Madness: [] };
 let baseStats = {
   Agility: 3, Strength: 3, Cunning: 3, Spirit: 3, Lore: 3, Luck: 3,
   Initiative: 3, Combat: 3, Grit: 1, Willpower: 3, Defense: 3,
   Health: 10, Sanity: 10
 };
-
-function showTab(id) {
-  document.querySelectorAll('.tabContent').forEach(tab => tab.style.display = 'none');
-  const target = document.getElementById(id);
-  if (target) target.style.display = 'block';
-}
+let currentStats = {
+  Health: 10,
+  Sanity: 10,
+  Corruption: 0,
+  DarkStone: 0,
+  Gold: 0,
+  XP: 0
+};
+let oncePerAdventure = [];
 
 function calcStats() {
   const stats = { ...baseStats };
@@ -34,18 +36,27 @@ function calcStats() {
       Object.entries(skill.effects).forEach(([stat, val]) => {
         if (stats[stat] != null) stats[stat] += val;
       });
+      if (skill.desc?.toLowerCase().includes("once per adventure")) {
+        if (!oncePerAdventure.includes(skill.name)) oncePerAdventure.push(skill.name);
+      }
     }
   });
   return stats;
+}
+
+function showTab(id) {
+  document.querySelectorAll('.tabContent').forEach(tab => tab.style.display = 'none');
+  const tab = document.getElementById(id);
+  if (tab) tab.style.display = 'block';
 }
 
 function renderStatsTab() {
   const tab = document.getElementById("statsTab");
   tab.innerHTML = "<h3>Stats</h3>";
   const stats = calcStats();
-  Object.entries(stats).forEach(([stat, val]) => {
+  Object.entries(stats).forEach(([k, v]) => {
     const div = document.createElement("div");
-    div.textContent = stat + ": " + val;
+    div.textContent = `${k}: ${v}`;
     tab.appendChild(div);
   });
 }
@@ -67,13 +78,11 @@ function renderGearTab() {
       select.appendChild(opt);
     });
     select.onchange = () => {
-      if (select.value) {
-        equipped[slot] = gearList.find(i => i.id === select.value);
-      } else {
-        delete equipped[slot];
-      }
+      if (select.value) equipped[slot] = gearList.find(i => i.id === select.value);
+      else delete equipped[slot];
       renderGearTab();
       renderStatsTab();
+      renderSheetTab();
     };
     tab.appendChild(label);
     tab.appendChild(select);
@@ -97,18 +106,19 @@ function renderConditionsTab() {
     const section = document.createElement("div");
     section.innerHTML = `<h3 style="color:${type === "Mutations" ? "green" : type === "Injuries" ? "red" : "blue"}">${type}</h3>`;
     list.forEach((c, i) => {
-      const entry = document.createElement("div");
-      entry.textContent = c;
-      const remove = document.createElement("button");
-      remove.textContent = "Remove";
-      remove.onclick = () => {
+      const div = document.createElement("div");
+      div.textContent = c;
+      const btn = document.createElement("button");
+      btn.textContent = "Remove";
+      btn.onclick = () => {
         if (confirm("Remove condition?")) {
           list.splice(i, 1);
           renderConditionsTab();
+          renderSheetTab();
         }
       };
-      entry.appendChild(remove);
-      section.appendChild(entry);
+      div.appendChild(btn);
+      section.appendChild(div);
     });
     const select = document.createElement("select");
     select.innerHTML = "<option value=''>-- Choose --</option>";
@@ -122,6 +132,7 @@ function renderConditionsTab() {
       if (select.value) {
         list.push(select.value);
         renderConditionsTab();
+        renderSheetTab();
       }
     };
     const roll = document.createElement("button");
@@ -131,6 +142,7 @@ function renderConditionsTab() {
       const result = hexcrawlConditions[type].find(e => e.startsWith(String(roll))) || `Rolled ${roll}: Unknown`;
       list.push(result);
       renderConditionsTab();
+      renderSheetTab();
     };
     section.appendChild(select);
     section.appendChild(roll);
@@ -138,35 +150,60 @@ function renderConditionsTab() {
   });
 }
 
-function renderSkillTree() {
-  const tab = document.getElementById("treeTab");
-  tab.innerHTML = "<h3>Skill Tree (max 7)</h3>";
-  const grid = document.createElement("div");
-  grid.style.display = "grid";
-  grid.style.gridTemplateColumns = `repeat(${skillTree.length}, 1fr)`;
+function createStatAdjuster(label, key) {
+  const container = document.createElement("div");
+  container.textContent = `${label}: `;
+  const minus = document.createElement("button");
+  minus.textContent = "-";
+  minus.onclick = () => {
+    currentStats[key] = Math.max(0, currentStats[key] - 1);
+    renderSheetTab();
+  };
+  const val = document.createElement("span");
+  val.textContent = currentStats[key];
+  const plus = document.createElement("button");
+  plus.textContent = "+";
+  plus.onclick = () => {
+    currentStats[key]++;
+    renderSheetTab();
+  };
+  container.appendChild(minus);
+  container.appendChild(val);
+  container.appendChild(plus);
+  return container;
+}
 
-  skillTree.forEach(path => {
-    const col = document.createElement("div");
-    path.skills.forEach((skill, row) => {
-      const key = `${path.path}-${row}`;
-      const btn = document.createElement("button");
-      btn.textContent = skill.name;
-      btn.title = skill.desc;
-      const isSelected = selectedSkills.includes(key);
-      const canUnlock = row === 0 || selectedSkills.includes(`${path.path}-${row - 1}`);
-      btn.disabled = !canUnlock && !isSelected;
-      btn.style.background = isSelected ? "lightgreen" : "";
-      btn.onclick = () => {
-        if (isSelected) selectedSkills = selectedSkills.filter(k => k !== key);
-        else if (selectedSkills.length < 7) selectedSkills.push(key);
-        renderSkillTree();
-        renderStatsTab();
-      };
-      col.appendChild(btn);
-    });
-    grid.appendChild(col);
+function renderSheetTab() {
+  const tab = document.getElementById("sheetTab");
+  const stats = calcStats();
+  tab.innerHTML = "<h2>Character Sheet</h2>";
+
+  tab.appendChild(createStatAdjuster("Health", "Health"));
+  tab.appendChild(createStatAdjuster("Sanity", "Sanity"));
+  tab.appendChild(createStatAdjuster("Grit", "Grit"));
+  tab.appendChild(createStatAdjuster("Corruption", "Corruption"));
+  tab.appendChild(createStatAdjuster("Dark Stone", "DarkStone"));
+  tab.appendChild(createStatAdjuster("Gold", "Gold"));
+  tab.appendChild(createStatAdjuster("XP", "XP"));
+
+  const rolls = ["Defense", "Willpower", "Initiative", "Combat", "Agility", "Luck"];
+  rolls.forEach(k => {
+    const div = document.createElement("div");
+    div.textContent = `${k}: ${stats[k] ?? "-"}`;
+    tab.appendChild(div);
   });
-  tab.appendChild(grid);
+
+  const onceSection = document.createElement("div");
+  onceSection.innerHTML = "<h3>Once-per-Adventure</h3>";
+  oncePerAdventure.forEach(name => {
+    const line = document.createElement("div");
+    const check = document.createElement("input");
+    check.type = "checkbox";
+    line.appendChild(check);
+    line.appendChild(document.createTextNode(" " + name));
+    onceSection.appendChild(line);
+  });
+  tab.appendChild(onceSection);
 }
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -176,6 +213,6 @@ document.addEventListener("DOMContentLoaded", () => {
   renderStatsTab();
   renderGearTab();
   renderConditionsTab();
-  renderSkillTree();
+  renderSheetTab();
   showTab("statsTab");
 });
