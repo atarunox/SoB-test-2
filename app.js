@@ -1,4 +1,4 @@
-// Shadows of Brimstone Hero Tracker - Full app.js
+// Shadows of Brimstone Tracker - Full app.js
 import { gearList } from './gear.js';
 import { skillTree } from './skills.js';
 import { hexcrawlConditions } from './conditions.js';
@@ -152,7 +152,8 @@ function renderConditionsTab() {
 
 function createStatAdjuster(label, key) {
   const container = document.createElement("div");
-  container.textContent = `${label}: `;
+  container.className = "panel";
+  container.innerHTML = `<h3>${label}</h3>`;
   const minus = document.createElement("button");
   minus.textContent = "-";
   minus.onclick = () => {
@@ -161,6 +162,7 @@ function createStatAdjuster(label, key) {
   };
   const val = document.createElement("span");
   val.textContent = currentStats[key];
+  val.style.margin = "0 8px";
   const plus = document.createElement("button");
   plus.textContent = "+";
   plus.onclick = () => {
@@ -178,22 +180,28 @@ function renderSheetTab() {
   const stats = calcStats();
   tab.innerHTML = "<h2>Character Sheet</h2>";
 
-  tab.appendChild(createStatAdjuster("Health", "Health"));
-  tab.appendChild(createStatAdjuster("Sanity", "Sanity"));
-  tab.appendChild(createStatAdjuster("Grit", "Grit"));
-  tab.appendChild(createStatAdjuster("Corruption", "Corruption"));
-  tab.appendChild(createStatAdjuster("Dark Stone", "DarkStone"));
-  tab.appendChild(createStatAdjuster("Gold", "Gold"));
-  tab.appendChild(createStatAdjuster("XP", "XP"));
+  const layout = [
+    createStatAdjuster("Health", "Health"),
+    createStatAdjuster("Sanity", "Sanity"),
+    createStatAdjuster("Grit", "Grit"),
+    createStatAdjuster("Corruption", "Corruption"),
+    createStatAdjuster("Dark Stone", "DarkStone"),
+    createStatAdjuster("Gold", "Gold"),
+    createStatAdjuster("XP", "XP")
+  ];
+
+  layout.forEach(box => tab.appendChild(box));
 
   const rolls = ["Defense", "Willpower", "Initiative", "Combat", "Agility", "Luck"];
   rolls.forEach(k => {
     const div = document.createElement("div");
-    div.textContent = `${k}: ${stats[k] ?? "-"}`;
+    div.className = "panel";
+    div.innerHTML = `<h3>${k}</h3><p>${stats[k] ?? "-"}</p>`;
     tab.appendChild(div);
   });
 
   const onceSection = document.createElement("div");
+  onceSection.className = "panel";
   onceSection.innerHTML = "<h3>Once-per-Adventure</h3>";
   oncePerAdventure.forEach(name => {
     const line = document.createElement("div");
