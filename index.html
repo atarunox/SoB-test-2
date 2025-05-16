@@ -1,16 +1,15 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Shadows of Brimstone Hero Tracker</title>
+  <title>Hero Tracker</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="style.css">
-  <script type="module" src="app.js"></script>
-  <script src="heroes.js"></script>
-<script src="app.js" type="module"></script>
 </head>
 <body>
-  <h1>Hero Tracker <span style="font-size:0.7em">(v0.9)</span></h1>
-  <select id="heroSelect"><option value="Jargono Native">Jargono Native</option></select>
+  <h1>Hero Tracker</h1>
+  <select id="heroSelect">
+    <option>Loading...</option>
+  </select>
   <div class="tabs">
     <button data-tab="statsTab">Stats</button>
     <button data-tab="gearTab">Gear</button>
@@ -18,10 +17,15 @@
     <button data-tab="treeTab">Skill Tree</button>
     <button data-tab="sheetTab">Character Sheet</button>
   </div>
+
   <div id="statsTab" class="tabContent"></div>
   <div id="gearTab" class="tabContent"></div>
   <div id="conditionsTab" class="tabContent"></div>
   <div id="treeTab" class="tabContent"></div>
   <div id="sheetTab" class="tabContent"></div>
+
+  <!-- Load order: heroes first, app second -->
+  <script src="heroes.js"></script>
+  <script src="app-v0.1.15-clean.js" type="module"></script>
 </body>
 </html>
