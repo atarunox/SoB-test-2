@@ -1,4 +1,8 @@
 // --- Tab Render Functions ---
+let currentHero = null;
+let selectedHeroName = "";
+let currentStats = {}; // <-- optional if still used
+
 function renderStatsTab() {
   const tab = document.getElementById("statsTab");
   tab.innerHTML = `
@@ -21,6 +25,11 @@ function renderConditionsTab() {
 
 function renderSkillTree() {
   document.getElementById("treeTab").innerHTML = "Skill Tree TabPlaceholder";
+}
+function showTab(tabName) {
+  document.querySelectorAll(".tab-content").forEach(el => {
+    el.style.display = el.id === tabName ? "block" : "none";
+  });
 }
 
 // --- Character Sheet Tab ---
@@ -148,14 +157,22 @@ document.addEventListener("DOMContentLoaded", () => {
         .join("");
 
       heroSelect.addEventListener("change", e => {
-        const hero = HEROES.Western[e.target.value];
-        if (hero) {
-          currentStats.Health = hero.health;
-          currentStats.Sanity = hero.sanity;
-          currentStats.Grit = hero.maxGrit;
-          renderStatsTab(); // Re-render after setting stats
-        }
-      });
+  const heroName = e.target.value;
+  const hero = HEROES.Western[heroName];
+  if (hero) {
+    selectedHeroName = heroName;
+    currentHero = hero;
+
+    currentStats.Health = hero.health;
+    currentStats.Sanity = hero.sanity;
+    currentStats.Grit = hero.maxGrit;
+
+    renderStatsTab(); // Optional
+    renderSheetTab(); // ✅ This ensures the Character Sheet loads
+    showTab("sheetTab"); // Optional: auto-switch to Sheet tab
+  }
+});
+
     }
 
     renderStatsTab(); // Initial placeholder
