@@ -66,7 +66,15 @@ heroSelect.addEventListener("change", e => {
 });
 
 }
+
+renderStatsTab();
+renderGearTab();
+renderConditionsTab();
+renderSkillTree();
+renderSheetTab();
+showTab("sheetTab");
 });
+}});
 }
 
 renderStatsTab();
