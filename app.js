@@ -1,6 +1,23 @@
 
-// Hero Tracker v0.1.09 - Draggable Character Sheet Panels with mobile support
-document.querySelector("h1")?.insertAdjacentHTML("beforeend", " <span style='font-size:0.7em'>(v0.1.09)</span>");
+// Hero Tracker v0.1.10 â€” Clean rebuild with Gear + Character Sheet + working version
+
+document.addEventListener("DOMContentLoaded", () => {
+  const header = document.querySelector("h1");
+  if (header && !header.innerHTML.includes("v0.1.10")) {
+    header.innerHTML += " <span style='font-size:0.7em'>(v0.1.10)</span>";
+  }
+
+  document.querySelectorAll(".tabs button").forEach(btn => {
+    btn.addEventListener("click", () => showTab(btn.dataset.tab));
+  });
+
+  renderStatsTab();
+  renderGearTab();
+  renderConditionsTab();
+  renderSkillTree();
+  renderSheetTab();
+  showTab("sheetTab");
+});
 
 function log(msg) {
   const logArea = document.getElementById("debugLog") || (() => {
@@ -24,16 +41,28 @@ function log(msg) {
   logArea.appendChild(line);
 }
 
-let currentStats = {
-  Health: 10, Sanity: 10, Corruption: 0, DarkStone: 0, Gold: 0, XP: 0
-};
+function showTab(id) {
+  document.querySelectorAll('.tabContent').forEach(tab => tab.style.display = 'none');
+  const target = document.getElementById(id);
+  if (target) {
+    target.style.display = 'block';
+    if (id === "statsTab") renderStatsTab();
+    else if (id === "gearTab") renderGearTab();
+    else if (id === "conditionsTab") renderConditionsTab();
+    else if (id === "treeTab") renderSkillTree();
+    else if (id === "sheetTab") renderSheetTab();
+    log("Switched to tab: " + id);
+  }
+}
 
+function renderStatsTab() {
+  const tab = document.getElementById("statsTab");
+  tab.innerHTML = "<h3>Stats Tab</h3><p>Placeholder</p>";
+}
 
 function renderGearTab() {
-  log("renderGearTab() called");
   const tab = document.getElementById("gearTab");
-  tab.innerHTML = "<h3>Equipped Gear</h3><div style='color:green;'>Gear panel rendering test OK</div>";
-
+  tab.innerHTML = "<h3>Equipped Gear</h3><p style='color:green;'>Gear panel rendering test OK</p>";
   const slots = ["Head", "Torso", "Shoulders", "Coat", "Gloves", "Hands", "Feet", "Pants", "Face", "Extra 1", "Extra 2"];
   const equipped = {
     "Head": { name: "Sturdy Hat" },
@@ -43,35 +72,32 @@ function renderGearTab() {
     "Gloves": { name: "Brass Knuckles" },
     "Feet": { name: "Swift Boots" }
   };
-
   slots.forEach(slot => {
     const div = document.createElement("div");
     const item = equipped[slot];
-    div.innerHTML = "<strong>" + slot + "</strong>: " + (item ? item.name : "None");
+    div.innerHTML = `<strong>${slot}</strong>: ${item ? item.name : "None"}`;
     tab.appendChild(div);
   });
 }
 
-
-function showTab(id) {
-  document.querySelectorAll('.tabContent').forEach(tab => tab.style.display = 'none');
-  const target = document.getElementById(id);
-  if (target) {
-    target.style.display = 'block';
-    log("Switched to tab: " + id);
-  }
+function renderConditionsTab() {
+  const tab = document.getElementById("conditionsTab");
+  tab.innerHTML = "<h3>Conditions Tab</h3><p>Placeholder</p>";
 }
 
+function renderSkillTree() {
+  const tab = document.getElementById("treeTab");
+  tab.innerHTML = "<h3>Skill Tree Tab</h3><p>Placeholder</p>";
+}
+
+let currentStats = {
+  Health: 10, Sanity: 10, Grit: 1, Corruption: 0, DarkStone: 0, Gold: 0, XP: 0
+};
+
 function renderSheetTab() {
-  log("renderSheetTab() called");
   const tab = document.getElementById("sheetTab");
   tab.innerHTML = "<h2>Character Sheet</h2>";
-
   const layout = [
-    createPanel("Base Stats", [
-      statDisplay("Agility", 3), statDisplay("Strength", 3), statDisplay("Cunning", 3),
-      statDisplay("Spirit", 3), statDisplay("Lore", 3), statDisplay("Luck", 3)
-    ]),
     createPanel("Vitals", [
       statAdjuster("Health", "Health"),
       statAdjuster("Sanity", "Sanity"),
@@ -85,14 +111,15 @@ function renderSheetTab() {
       statAdjuster("XP", "XP"),
       statAdjuster("Corruption", "Corruption")
     ]),
+    createPanel("Base Stats", [
+      statDisplay("Agility", 3), statDisplay("Strength", 3), statDisplay("Cunning", 3),
+      statDisplay("Spirit", 3), statDisplay("Lore", 3), statDisplay("Luck", 3)
+    ]),
     createPanel("Combat Rolls", [
-      statDisplay("Combat", 4),
-      statDisplay("Initiative", 3),
-      statDisplay("To-Hit Melee", 7),
-      statDisplay("To-Hit Ranged", 6)
+      statDisplay("Combat", 4), statDisplay("Initiative", 3),
+      statDisplay("To-Hit Melee", 7), statDisplay("To-Hit Ranged", 6)
     ])
   ];
-
   layout.forEach(p => tab.appendChild(p));
   enablePanelDrag(tab);
 }
@@ -100,11 +127,10 @@ function renderSheetTab() {
 function createPanel(title, elements) {
   const panel = document.createElement("div");
   panel.className = "panel";
-  panel.setAttribute("draggable", "true");
-
   const header = document.createElement("h3");
   header.textContent = title;
   header.style.cursor = "grab";
+  panel.setAttribute("draggable", "true");
   panel.appendChild(header);
   elements.forEach(el => panel.appendChild(el));
   return panel;
@@ -136,13 +162,11 @@ function statDisplay(label, value) {
 
 function enablePanelDrag(container) {
   let dragSrc = null;
-
   container.querySelectorAll(".panel").forEach(panel => {
     panel.addEventListener("dragstart", e => {
       dragSrc = panel;
       panel.classList.add("dragging");
     });
-
     panel.addEventListener("dragover", e => {
       e.preventDefault();
       const panels = Array.from(container.querySelectorAll(".panel")).filter(p => p !== dragSrc);
@@ -150,36 +174,8 @@ function enablePanelDrag(container) {
       if (after) container.insertBefore(dragSrc, after);
       else container.appendChild(dragSrc);
     });
-
     panel.addEventListener("dragend", () => {
       panel.classList.remove("dragging");
     });
-  });
-}
-
-document.addEventListener("DOMContentLoaded", () => {
-  try {
-    document.querySelectorAll(".tabs button").forEach(btn => {
-      btn.addEventListener("click", () => showTab(btn.dataset.tab));
-    });
-    renderSheetTab();
-    showTab("sheetTab");
-  } catch (err) {
-    log("INIT ERROR: " + err.message);
-  }
-});
-
-
-function renderGearTab() {
-  log("renderGearTab() called");
-  const tab = document.getElementById("gearTab");
-  tab.innerHTML = "<h3>Equipped Gear</h3>";
-
-  const slots = ["Head", "Torso", "Feet"];
-  slots.forEach(slot => {
-    const div = document.createElement("div");
-    const item = equipped[slot];
-    div.innerHTML = `<strong>${slot}</strong>: ${item ? item.name : "None"}`;
-    tab.appendChild(div);
   });
 }
