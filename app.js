@@ -1,4 +1,4 @@
-// SoB Tracker with gear + skill stat modifiers in calcStats()
+// App.js with stat bonuses and source labels for gear and skills
 
 function log(msg) {
   const logArea = document.getElementById("debugLog") || (() => {
@@ -29,12 +29,7 @@ let baseStats = {
 };
 
 let currentStats = {
-  Health: 10,
-  Sanity: 10,
-  Corruption: 0,
-  DarkStone: 0,
-  Gold: 0,
-  XP: 0
+  Health: 10, Sanity: 10, Corruption: 0, DarkStone: 0, Gold: 0, XP: 0
 };
 
 const gearList = [
@@ -57,23 +52,31 @@ const skillTree = [
 ];
 const selectedSkills = ["Gladiator-0", "Gladiator-1"];
 
-function calcStats() {
+function calcStatsWithSources() {
   const stats = { ...baseStats };
+  const sources = {};
+
   Object.values(equipped).forEach(item => {
     Object.entries(item.effects).forEach(([stat, val]) => {
-      if (stats[stat] != null) stats[stat] += val;
+      stats[stat] = (stats[stat] ?? 0) + val;
+      sources[stat] = (sources[stat] || []);
+      sources[stat].push(`${val > 0 ? "+" : ""}${val} from ${item.name}`);
     });
   });
+
   selectedSkills.forEach(key => {
     const [path, i] = key.split("-");
     const skill = skillTree.find(p => p.path === path)?.skills[+i];
     if (skill?.effects) {
       Object.entries(skill.effects).forEach(([stat, val]) => {
-        if (stats[stat] != null) stats[stat] += val;
+        stats[stat] = (stats[stat] ?? 0) + val;
+        sources[stat] = (sources[stat] || []);
+        sources[stat].push(`${val > 0 ? "+" : ""}${val} from ${skill.name}`);
       });
     }
   });
-  return stats;
+
+  return { stats, sources };
 }
 
 function showTab(id) {
@@ -88,15 +91,15 @@ function showTab(id) {
 function renderSheetTab() {
   log("renderSheetTab() called");
   const tab = document.getElementById("sheetTab");
-  const stats = calcStats();
+  const { stats, sources } = calcStatsWithSources();
   tab.innerHTML = "<h2>Character Sheet</h2>";
 
   const layout = [
     createPanel("Vitals", [
       statAdjuster("Health", "Health"),
       statAdjuster("Sanity", "Sanity"),
-      statDisplay("Defense", stats.Defense),
-      statDisplay("Willpower", stats.Willpower)
+      statDisplay("Defense", stats.Defense, sources.Defense),
+      statDisplay("Willpower", stats.Willpower, sources.Willpower)
     ]),
     createPanel("Resources", [
       statAdjuster("Dark Stone", "DarkStone"),
@@ -105,8 +108,8 @@ function renderSheetTab() {
       statAdjuster("Corruption", "Corruption")
     ]),
     createPanel("Combat Rolls", [
-      statDisplay("Combat", stats.Combat),
-      statDisplay("Initiative", stats.Initiative),
+      statDisplay("Combat", stats.Combat, sources.Combat),
+      statDisplay("Initiative", stats.Initiative, sources.Initiative),
       statDisplay("To-Hit Melee", stats.Combat + 3),
       statDisplay("To-Hit Ranged", stats.Cunning + 3)
     ])
@@ -143,9 +146,16 @@ function statAdjuster(label, key) {
   return row;
 }
 
-function statDisplay(label, value) {
+function statDisplay(label, value, bonuses) {
   const row = document.createElement("div");
-  row.textContent = `${label}: ${value ?? "-"}`;
+  row.innerHTML = `${label}: <strong>${value}</strong>`;
+  if (bonuses && bonuses.length > 0) {
+    const bonusList = document.createElement("div");
+    bonusList.style.fontSize = "0.8em";
+    bonusList.style.color = "#333";
+    bonusList.innerHTML = bonuses.map(b => `<div>(${b})</div>`).join("");
+    row.appendChild(bonusList);
+  }
   return row;
 }
 
