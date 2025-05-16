@@ -44,28 +44,42 @@ function renderSheetTab() {
   tab.innerHTML = `
     <div class="character-sheet-grid" id="sheetSections" ondragover="event.preventDefault()">
       ${renderDraggableSection("Vitals", `
-        <div class='tile-content'>
-          <p>Health ${hero.currHealth ?? hero.health}/${hero.health}</p>
-          <p>Sanity ${hero.currSanity ?? hero.sanity}/${hero.sanity}</p>
-          <p>Grit ${hero.maxGrit}/${hero.maxGrit}</p>
-          <p>Willpower ${hero.willpower}</p>
-          <p>Defense ${hero.defense}</p>
+        <div class='tile-content stats-grid'>
+          <p>Health <span>${hero.currHealth ?? hero.health}/${hero.health}</span></p>
+          <p>Sanity <span>${hero.currSanity ?? hero.sanity}/${hero.sanity}</span></p>
+          <p>Grit <span>${hero.maxGrit}/${hero.maxGrit}</span></p>
+          <p>Willpower <span>${hero.willpower}</span></p>
+          <p>Defense <span>${hero.defense}</span></p>
         </div>
       `)}
 
       ${renderDraggableSection("Stats", `
-        <div class='tile-content'>
-          ${Object.entries(hero.stats).map(([key, val]) => `<p>${key} ${val}</p>`).join("")}
-          <p>Corruption ${hero.corruption ?? 0}+</p>
-          <p>Dark Stone ${hero.darkstone ?? 0}</p>
+        <div class='tile-content stats-grid'>
+          ${Object.entries(hero.stats).map(([key, val]) => `<p>${key} <span>${val}</span></p>`).join("")}
+          <p>Corruption <span>${hero.corruption ?? 0}+</span></p>
+          <p>Dark Stone <span>${hero.darkstone ?? 0}</span></p>
         </div>
       `)}
 
       ${renderDraggableSection("Combat", `
+        <div class='tile-content stats-grid'>
+          <p>To Hit <span>${hero.toHit?.ranged ?? "—"}</span></p>
+          <p>Melee <span>${hero.toHit?.melee ?? "—"}</span></p>
+          <p>Ranged <span>${hero.stats?.Agility ?? "—"}</span></p>
+        </div>
+      `)}
+
+      ${renderDraggableSection("Conditions", `
         <div class='tile-content'>
-          <p>To Hit ${hero.toHit?.ranged ?? "—"}</p>
-          <p>Melee ${hero.toHit?.melee ?? "—"}</p>
-          <p>Ranged ${hero.stats?.Agility ?? "—"}</p>
+          <p><strong>Fungus Growth</strong></p>
+          <p>You get Plump Fungus Side Bag Token at the start of each Adventure.</p>
+        </div>
+      `)}
+
+      ${renderDraggableSection("XP & Gold", `
+        <div class='tile-content stats-grid'>
+          <p>XP <span>${hero.xp ?? 15000}</span></p>
+          <p>Gold <span>${hero.gold ?? 350}</span></p>
         </div>
       `)}
 
@@ -83,7 +97,6 @@ function renderSheetTab() {
     </div>
   `;
 
-  // Update live values
   hero.currHealth = hero.currHealth ?? hero.health;
   hero.currSanity = hero.currSanity ?? hero.sanity;
 }
@@ -111,26 +124,38 @@ function renderDraggableSection(title, content) {
 
 .tile {
   background: #f4e6c1;
-  border: 1px solid #a29074;
-  border-radius: 6px;
+  border: 1px solid #988464;
+  border-radius: 4px;
   box-shadow: 2px 2px 4px rgba(0,0,0,0.2);
-  padding: 0.5em 1em;
+  padding: 0.75em 1em;
 }
 
 .tile-header {
   font-weight: bold;
-  font-size: 1.2em;
-  border-bottom: 2px solid #a29074;
+  font-size: 1.1em;
+  border-bottom: 1px solid #a29074;
   padding-bottom: 0.3em;
   margin-bottom: 0.5em;
+  letter-spacing: 0.5px;
 }
 
 .tile-content p,
 .tile-content li {
-  margin: 0.2em 0;
+  margin: 0.25em 0;
   font-size: 1em;
 }
+
+.stats-grid p {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid #d2c4aa;
+}
+
+.stats-grid span {
+  font-weight: bold;
+}
 */
+
 
 
 
