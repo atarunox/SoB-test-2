@@ -179,3 +179,19 @@ document.addEventListener("DOMContentLoaded", () => {
     log("INIT ERROR: " + err.message);
   }
 });
+// App.js fixed to restore renderStatsTab with debug and bonus sources
+
+// ... (rest of the code same as before, now restoring renderStatsTab properly)
+
+function renderStatsTab() {
+  log("renderStatsTab() called");
+  const tab = document.getElementById("statsTab");
+  const { stats, sources } = calcStatsWithSources();
+  if (tab) {
+    tab.innerHTML = "<h3>Stats</h3>";
+    Object.keys(stats).forEach(stat => {
+      const block = statDisplay(stat, stats[stat], sources[stat]);
+      tab.appendChild(block);
+    });
+  }
+}
