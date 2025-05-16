@@ -294,9 +294,10 @@ document.addEventListener("DOMContentLoaded", () => {
   if (hero) {
     selectedHeroName = heroName;
     currentHero = hero;
+hero.inventory = gearList.filter(g => g.id.startsWith("test_"));
 
     currentStats = calculateCurrentStats(hero);
-
+  
 
     renderStatsTab();
     renderSheetTab();
