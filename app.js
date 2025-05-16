@@ -1,10 +1,10 @@
 
-// Hero Tracker v0.1.12 â€” Clean rebuild with Gear + Character Sheet + working version
+// Hero Tracker v0.1.10 â€” Restored working build with Gear + Character Sheet
 
 document.addEventListener("DOMContentLoaded", () => {
   const header = document.querySelector("h1");
-  if (header && !header.innerHTML.includes("v0.1.12")) {
-    header.innerHTML += " <span style='font-size:0.7em'>(v0.1.12)</span>";
+  if (header && !header.innerHTML.includes("v0.1.10")) {
+    header.innerHTML += " <span style='font-size:0.7em'>(v0.1.10)</span>";
   }
 
   document.querySelectorAll(".tabs button").forEach(btn => {
@@ -61,85 +61,16 @@ function renderStatsTab() {
 }
 
 function renderGearTab() {
-  log("renderGearTab() called");
   const tab = document.getElementById("gearTab");
-  tab.innerHTML = "<h3>Equipped Gear</h3><p style='color:green;'>Select gear for each slot</p>";
-
+  tab.innerHTML = "<h3>Equipped Gear</h3><p style='color:green;'>Gear panel rendering test OK</p>";
   const slots = ["Head", "Torso", "Shoulders", "Coat", "Gloves", "Hands", "Feet", "Pants", "Face", "Extra 1", "Extra 2"];
-  window.equipped = window.equipped || {
-    "Head": { id: "hat", name: "Sturdy Hat", slot: "Head" },
-    "Torso": { id: "vest", name: "Leather Vest", slot: "Torso" },
-    "Feet": { id: "boots", name: "Swift Boots", slot: "Feet" }
-  };
-
-  const inventory = [
-    { id: "none", name: "None", slot: "Any" },
-    { id: "hat", name: "Sturdy Hat", slot: "Head" },
-    { id: "vest", name: "Leather Vest", slot: "Torso" },
-    { id: "shoulders", name: "Spiked Shoulders", slot: "Shoulders" },
-    { id: "coat", name: "Duster Coat", slot: "Coat" },
-    { id: "gloves", name: "Brass Knuckles", slot: "Gloves" },
-    { id: "boots", name: "Swift Boots", slot: "Feet" }
-  ];
-
-  slots.forEach(slot => {
-    const div = document.createElement("div");
-    const label = document.createElement("label");
-    label.textContent = slot + ": ";
-    const select = document.createElement("select");
-
-    const options = inventory.filter(i => i.slot === slot || i.slot === "Any");
-    options.forEach(item => {
-      const opt = document.createElement("option");
-      opt.value = item.id;
-      opt.textContent = item.name;
-      if (window.equipped[slot]?.id === item.id) opt.selected = true;
-      select.appendChild(opt);
-    });
-
-    select.onchange = () => {
-      const item = inventory.find(i => i.id === select.value);
-      window.equipped[slot] = item.id === "none" ? null : item;
-      renderGearTab(); // re-render to reflect changes
-    };
-
-    div.appendChild(label);
-    div.appendChild(select);
-    tab.appendChild(div);
-  });
-}
-  ];
-
-  const equipped = window.equipped = window.equipped || {};
-
-  slots.forEach(slot => {
-    const div = document.createElement("div");
-    const label = document.createElement("label");
-    label.textContent = slot + ": ";
-    const select = document.createElement("select");
-
-    // Populate dropdown
-    inventory
-      .filter(i => i.slot === slot || i.slot === "Any")
-      .forEach(item => {
-        const opt = document.createElement("option");
-        opt.value = item.id;
-        opt.textContent = item.name;
-        if (equipped[slot]?.id === item.id) opt.selected = true;
-        select.appendChild(opt);
-      });
-
-    select.onchange = () => {
-      const selected = inventory.find(i => i.id === select.value);
-      equipped[slot] = selected?.id === "nothing" ? null : selected;
-      renderGearTab();
-    };
-
-    div.appendChild(label);
-    div.appendChild(select);
-    tab.appendChild(div);
-  });
-}
+  const equipped = {
+    "Head": { name: "Sturdy Hat" },
+    "Torso": { name: "Leather Vest" },
+    "Shoulders": { name: "Spiked Shoulders" },
+    "Coat": { name: "Duster Coat" },
+    "Gloves": { name: "Brass Knuckles" },
+    "Feet": { name: "Swift Boots" }
   };
   slots.forEach(slot => {
     const div = document.createElement("div");
