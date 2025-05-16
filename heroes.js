@@ -16,7 +16,7 @@ const HEROES = {
         "Battle-Hardened: Defense 3+ vs ranged. No adjacency target required.",
         "OtherWorld Native (Trederra): +3 Lore in Trederra. Starts with a Trederra Personal Item."
       ],
-      items: ["Trusty Trench Pistol", "Worn Trench Coat", "Veteranâ€™s Breath Mask"]
+      items: ["Trusty Trench Pistol", "Worn Trench Coat", "Veteran's Breath Mask"]
     },
     "Cowboy": {
       stats: { Agility: 2, Cunning: 3, Spirit: 1, Strength: 4, Lore: 3, Luck: 2, Initiative: 3 },
