@@ -70,12 +70,13 @@ function renderGearTab() {
             <label><strong>${slot}</strong></label>
             <div>${gearName}</div>
             <select onchange="equipGear('${slot}', this.value)">
-  <option value="">(Empty)</option>
+  <option value="" ${!equipped ? "selected" : ""}>(Empty)</option>
   ${currentHero.inventory
     .filter(g => g.slot === slot)
-    .map(g => `<option value="${g.id}">${g.name}</option>`)
+    .map(g => `<option value="${g.id}" ${equipped?.id === g.id ? "selected" : ""}>${g.name}</option>`)
     .join("")}
 </select>
+
 
           </div>
         `;
@@ -91,30 +92,34 @@ function renderGearTab() {
 
 // Equip handler (attach globally)
 window.equipGear = function (slot, gearId) {
+  // Unequip
   if (gearId === "") {
     if (currentHero.gear[slot]) {
-      currentHero.inventory.push(currentHero.gear[slot]);
-      delete currentHero.gear[slot];
+      currentHero.inventory.push(currentHero.gear[slot]); // return to inventory
+      delete currentHero.gear[slot]; // clear the slot
     }
   } else {
+    // Equip
     const gear = gearList.find(g => g.id === gearId);
     if (!gear) return;
 
+    // Remove from inventory
     currentHero.inventory = currentHero.inventory.filter(g => g.id !== gearId);
+
+    // If something is already equipped, return it to inventory
     if (currentHero.gear[slot]) {
       currentHero.inventory.push(currentHero.gear[slot]);
     }
+
+    // Equip new item
     currentHero.gear[slot] = gear;
   }
 
-  // ✅ Update this part
-  currentStats = calculateCurrentStats(currentHero); // recalculate with gear
+  currentStats = calculateCurrentStats(currentHero); // ✅ Recalculate
   renderGearTab();
   renderStatsTab();
 };
 
-
-};
 
 
 
