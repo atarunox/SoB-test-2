@@ -1,10 +1,34 @@
 
-// Hero Tracker v0.1.10 â€” Restored working build with Gear + Character Sheet
+let equipped = {
+  "Head": { name: "Sturdy Hat", effects: { Defense: 1 } },
+  "Torso": { name: "Leather Vest", effects: { Defense: 1 } },
+  "Feet": { name: "Swift Boots", effects: { Agility: 1 } }
+};
+
+function calcStats() {
+  const stats = {
+    Agility: 3, Strength: 3, Cunning: 3, Spirit: 3, Lore: 3, Luck: 3,
+    Initiative: 3, Combat: 3, Defense: 3, Willpower: 3
+  };
+  for (const slot in equipped) {
+    const item = equipped[slot];
+    if (item?.effects) {
+      for (const stat in item.effects) {
+        stats[stat] = (stats[stat] || 0) + item.effects[stat];
+      }
+    }
+  }
+  return stats;
+}
+
+
+
+// Hero Tracker v0.1.11 â€” Restored working build with Gear + Character Sheet
 
 document.addEventListener("DOMContentLoaded", () => {
   const header = document.querySelector("h1");
-  if (header && !header.innerHTML.includes("v0.1.10")) {
-    header.innerHTML += " <span style='font-size:0.7em'>(v0.1.10)</span>";
+  if (header && !header.innerHTML.includes("v0.1.11")) {
+    header.innerHTML += " <span style='font-size:0.7em'>(v0.1.11)</span>";
   }
 
   document.querySelectorAll(".tabs button").forEach(btn => {
@@ -102,8 +126,8 @@ function renderSheetTab() {
       statAdjuster("Health", "Health"),
       statAdjuster("Sanity", "Sanity"),
       statAdjuster("Grit", "Grit"),
-      statDisplay("Defense", 4),
-      statDisplay("Willpower", 4)
+      statDisplay("Defense", calcStats().Defense),
+      statDisplay("Willpower", calcStats().Willpower)
     ]),
     createPanel("Resources", [
       statAdjuster("Dark Stone", "DarkStone"),
@@ -112,7 +136,7 @@ function renderSheetTab() {
       statAdjuster("Corruption", "Corruption")
     ]),
     createPanel("Base Stats", [
-      statDisplay("Agility", 3), statDisplay("Strength", 3), statDisplay("Cunning", 3),
+      statDisplay("Agility", calcStats().Agility), statDisplay("Strength", 3), statDisplay("Cunning", 3),
       statDisplay("Spirit", 3), statDisplay("Lore", 3), statDisplay("Luck", 3)
     ]),
     createPanel("Combat Rolls", [
