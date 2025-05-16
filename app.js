@@ -1,4 +1,5 @@
-// Shadows of Brimstone Tracker - Full app.js
+// SoB Tracker app.js with Character Sheet panel layout (grouped and draggable in layout)
+
 import { gearList } from './gear.js';
 import { skillTree } from './skills.js';
 import { hexcrawlConditions } from './conditions.js';
@@ -61,157 +62,131 @@ function renderStatsTab() {
   });
 }
 
-function renderGearTab() {
-  const tab = document.getElementById("gearTab");
-  tab.innerHTML = "<h3>Gear</h3>";
-  const slots = ["Head", "Shoulders", "Torso", "Coat", "Gloves", "Hands", "Feet", "Pants", "Face", "Extra 1", "Extra 2"];
-  slots.forEach(slot => {
-    const label = document.createElement("label");
-    label.textContent = slot + ": ";
-    const select = document.createElement("select");
-    select.innerHTML = "<option value=''>None</option>";
-    gearList.filter(i => i.slot === slot).forEach(item => {
-      const opt = document.createElement("option");
-      opt.value = item.id;
-      opt.textContent = item.name;
-      if (equipped[slot]?.id === item.id) opt.selected = true;
-      select.appendChild(opt);
-    });
-    select.onchange = () => {
-      if (select.value) equipped[slot] = gearList.find(i => i.id === select.value);
-      else delete equipped[slot];
-      renderGearTab();
-      renderStatsTab();
-      renderSheetTab();
-    };
-    tab.appendChild(label);
-    tab.appendChild(select);
-    tab.appendChild(document.createElement("br"));
-  });
-}
-
-function renderConditionsTab() {
-  const tab = document.getElementById("conditionsTab");
-  tab.innerHTML = "";
-
-  const toggle = document.createElement("label");
-  toggle.innerHTML = `<input type="checkbox" ${useHexcrawl ? "checked" : ""}> Use Hexcrawl`;
-  toggle.querySelector("input").onchange = () => {
-    useHexcrawl = toggle.querySelector("input").checked;
-    renderConditionsTab();
-  };
-  tab.appendChild(toggle);
-
-  Object.entries(conditions).forEach(([type, list]) => {
-    const section = document.createElement("div");
-    section.innerHTML = `<h3 style="color:${type === "Mutations" ? "green" : type === "Injuries" ? "red" : "blue"}">${type}</h3>`;
-    list.forEach((c, i) => {
-      const div = document.createElement("div");
-      div.textContent = c;
-      const btn = document.createElement("button");
-      btn.textContent = "Remove";
-      btn.onclick = () => {
-        if (confirm("Remove condition?")) {
-          list.splice(i, 1);
-          renderConditionsTab();
-          renderSheetTab();
-        }
-      };
-      div.appendChild(btn);
-      section.appendChild(div);
-    });
-    const select = document.createElement("select");
-    select.innerHTML = "<option value=''>-- Choose --</option>";
-    hexcrawlConditions[type].forEach(e => {
-      const opt = document.createElement("option");
-      opt.value = e;
-      opt.textContent = e;
-      select.appendChild(opt);
-    });
-    select.onchange = () => {
-      if (select.value) {
-        list.push(select.value);
-        renderConditionsTab();
-        renderSheetTab();
-      }
-    };
-    const roll = document.createElement("button");
-    roll.textContent = "Roll";
-    roll.onclick = () => {
-      const roll = (Math.floor(Math.random() * 6) + 1) * 10 + Math.floor(Math.random() * 6) + 1;
-      const result = hexcrawlConditions[type].find(e => e.startsWith(String(roll))) || `Rolled ${roll}: Unknown`;
-      list.push(result);
-      renderConditionsTab();
-      renderSheetTab();
-    };
-    section.appendChild(select);
-    section.appendChild(roll);
-    tab.appendChild(section);
-  });
-}
-
-function createStatAdjuster(label, key) {
-  const container = document.createElement("div");
-  container.className = "panel";
-  container.innerHTML = `<h3>${label}</h3>`;
-  const minus = document.createElement("button");
-  minus.textContent = "-";
-  minus.onclick = () => {
-    currentStats[key] = Math.max(0, currentStats[key] - 1);
-    renderSheetTab();
-  };
-  const val = document.createElement("span");
-  val.textContent = currentStats[key];
-  val.style.margin = "0 8px";
-  const plus = document.createElement("button");
-  plus.textContent = "+";
-  plus.onclick = () => {
-    currentStats[key]++;
-    renderSheetTab();
-  };
-  container.appendChild(minus);
-  container.appendChild(val);
-  container.appendChild(plus);
-  return container;
-}
-
 function renderSheetTab() {
   const tab = document.getElementById("sheetTab");
   const stats = calcStats();
   tab.innerHTML = "<h2>Character Sheet</h2>";
 
-  const layout = [
-    createStatAdjuster("Health", "Health"),
-    createStatAdjuster("Sanity", "Sanity"),
-    createStatAdjuster("Grit", "Grit"),
-    createStatAdjuster("Corruption", "Corruption"),
-    createStatAdjuster("Dark Stone", "DarkStone"),
-    createStatAdjuster("Gold", "Gold"),
-    createStatAdjuster("XP", "XP")
+  const panelOrder = [
+    { id: "vitals", title: "Vitals", content: renderVitals },
+    { id: "resources", title: "Resources", content: renderResources },
+    { id: "combat", title: "Combat Rolls", content: renderCombatRolls },
+    { id: "abilities", title: "Once per Adventure", content: renderOnceAbilities },
+    { id: "conditions", title: "Conditions", content: renderConditionsSummary }
   ];
 
-  layout.forEach(box => tab.appendChild(box));
+  panelOrder.forEach(({ id, title, content }) => {
+    const panel = document.createElement("div");
+    panel.className = "panel";
+    panel.setAttribute("draggable", "true");
+    panel.dataset.panel = id;
 
-  const rolls = ["Defense", "Willpower", "Initiative", "Combat", "Agility", "Luck"];
-  rolls.forEach(k => {
-    const div = document.createElement("div");
-    div.className = "panel";
-    div.innerHTML = `<h3>${k}</h3><p>${stats[k] ?? "-"}</p>`;
-    tab.appendChild(div);
+    const header = document.createElement("h3");
+    header.textContent = title;
+    panel.appendChild(header);
+
+    const body = content(stats);
+    if (Array.isArray(body)) body.forEach(el => panel.appendChild(el));
+    else if (body) panel.appendChild(body);
+
+    tab.appendChild(panel);
   });
 
-  const onceSection = document.createElement("div");
-  onceSection.className = "panel";
-  onceSection.innerHTML = "<h3>Once-per-Adventure</h3>";
-  oncePerAdventure.forEach(name => {
+  enablePanelDrag(document.getElementById("sheetTab"));
+}
+
+function renderVitals(stats) {
+  return [
+    statAdjuster("Health", "Health"),
+    statAdjuster("Sanity", "Sanity"),
+    statDisplay("Defense", stats.Defense),
+    statDisplay("Willpower", stats.Willpower)
+  ];
+}
+
+function renderResources() {
+  return [
+    statAdjuster("Dark Stone", "DarkStone"),
+    statAdjuster("Gold", "Gold"),
+    statAdjuster("XP", "XP"),
+    statAdjuster("Corruption", "Corruption")
+  ];
+}
+
+function renderCombatRolls(stats) {
+  return [
+    statDisplay("Combat", stats.Combat),
+    statDisplay("Initiative", stats.Initiative),
+    statDisplay("To-Hit Melee", stats.Combat + 3),
+    statDisplay("To-Hit Ranged", stats.Cunning + 3)
+  ];
+}
+
+function renderOnceAbilities() {
+  return oncePerAdventure.map(name => {
     const line = document.createElement("div");
     const check = document.createElement("input");
     check.type = "checkbox";
     line.appendChild(check);
     line.appendChild(document.createTextNode(" " + name));
-    onceSection.appendChild(line);
+    return line;
   });
-  tab.appendChild(onceSection);
+}
+
+function renderConditionsSummary() {
+  return Object.entries(conditions).flatMap(([type, list]) => {
+    return list.map(entry => {
+      const div = document.createElement("div");
+      div.textContent = `${type}: ${entry}`;
+      return div;
+    });
+  });
+}
+
+function statAdjuster(label, key) {
+  const row = document.createElement("div");
+  const minus = document.createElement("button");
+  minus.textContent = "-";
+  minus.onclick = () => { currentStats[key] = Math.max(0, currentStats[key] - 1); renderSheetTab(); };
+  const val = document.createElement("span");
+  val.textContent = currentStats[key];
+  val.style.margin = "0 8px";
+  const plus = document.createElement("button");
+  plus.textContent = "+";
+  plus.onclick = () => { currentStats[key]++; renderSheetTab(); };
+  row.textContent = `${label}: `;
+  row.appendChild(minus);
+  row.appendChild(val);
+  row.appendChild(plus);
+  return row;
+}
+
+function statDisplay(label, value) {
+  const row = document.createElement("div");
+  row.textContent = `${label}: ${value ?? "-"}`;
+  return row;
+}
+
+function enablePanelDrag(container) {
+  let dragSrc = null;
+
+  container.querySelectorAll(".panel").forEach(panel => {
+    panel.addEventListener("dragstart", e => {
+      dragSrc = panel;
+      panel.classList.add("dragging");
+    });
+
+    panel.addEventListener("dragover", e => {
+      e.preventDefault();
+      const panels = Array.from(container.querySelectorAll(".panel"));
+      const after = panels.find(p => e.clientY < p.getBoundingClientRect().top + p.offsetHeight / 2 && p !== dragSrc);
+      if (after) container.insertBefore(dragSrc, after);
+    });
+
+    panel.addEventListener("dragend", () => {
+      dragSrc.classList.remove("dragging");
+    });
+  });
 }
 
 document.addEventListener("DOMContentLoaded", () => {
