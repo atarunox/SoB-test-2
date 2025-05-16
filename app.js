@@ -1,4 +1,7 @@
-// App.js with stat bonuses and source labels for gear and skills
+
+// Version 0.9.3 - Cleaned app.js with working tabs and stat bonuses
+
+document.querySelector("h1")?.insertAdjacentHTML("beforeend", " <span style='font-size:0.7em'>(v0.9.3)</span>");
 
 function log(msg) {
   const logArea = document.getElementById("debugLog") || (() => {
@@ -88,6 +91,35 @@ function showTab(id) {
   }
 }
 
+function renderStatsTab() {
+  log("renderStatsTab() called");
+  const tab = document.getElementById("statsTab");
+  const { stats, sources } = calcStatsWithSources();
+  tab.innerHTML = "<h3>Stats</h3>";
+  Object.keys(stats).forEach(stat => {
+    const block = statDisplay(stat, stats[stat], sources[stat]);
+    tab.appendChild(block);
+  });
+}
+
+function renderGearTab() {
+  log("renderGearTab() called");
+  const tab = document.getElementById("gearTab");
+  tab.innerHTML = "<h3>Gear Tab Loaded (placeholder)</h3>";
+}
+
+function renderConditionsTab() {
+  log("renderConditionsTab() called");
+  const tab = document.getElementById("conditionsTab");
+  tab.innerHTML = "<h3>Conditions Tab Loaded (placeholder)</h3>";
+}
+
+function renderSkillTree() {
+  log("renderSkillTree() called");
+  const tab = document.getElementById("treeTab");
+  tab.innerHTML = "<h3>Skill Tree Tab Loaded (placeholder)</h3>";
+}
+
 function renderSheetTab() {
   log("renderSheetTab() called");
   const tab = document.getElementById("sheetTab");
@@ -164,11 +196,6 @@ document.addEventListener("DOMContentLoaded", () => {
     document.querySelectorAll(".tabs button").forEach(btn => {
       btn.addEventListener("click", () => showTab(btn.dataset.tab));
     });
-    renderStatsTab = () => log("Stats not implemented");
-    renderGearTab = () => log("Gear not implemented");
-    renderConditionsTab = () => log("Conditions not implemented");
-    renderSkillTree = () => log("Skill tree not implemented");
-
     renderStatsTab();
     renderGearTab();
     renderConditionsTab();
@@ -179,22 +206,3 @@ document.addEventListener("DOMContentLoaded", () => {
     log("INIT ERROR: " + err.message);
   }
 });
-// App.js fixed to restore renderStatsTab with debug and bonus sources
-
-// ... (rest of the code same as before, now restoring renderStatsTab properly)
-
-function renderStatsTab() {
-  log("renderStatsTab() called");
-  const tab = document.getElementById("statsTab");
-  const { stats, sources } = calcStatsWithSources();
-  if (tab) {
-    tab.innerHTML = "<h3>Stats</h3>";
-    Object.keys(stats).forEach(stat => {
-      const block = statDisplay(stat, stats[stat], sources[stat]);
-      tab.appendChild(block);
-    });
-  }
-}
-
-// Add app version to header
-document.querySelector("h1")?.insertAdjacentHTML("beforeend", " <span style='font-size:0.7em'>(v0.9.2)</span>");
