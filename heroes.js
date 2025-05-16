@@ -47,7 +47,7 @@ const HEROES = {
         "Expert Miner: Double Gold and Dark Stone from loot/scavenge/encounter cards.",
         "Death Blow: 8+ to-hit rolls double damage (only for D8-based weapons)."
       ],
-      items: ["Heavy Pick Axe", "Minerâ€™s Canteen"]
+      items: ["Heavy Pick Axe", "Miner's Canteen"]
     },
     "Jargono Native": {
       stats: { Agility: 4, Cunning: 2, Spirit: 3, Strength: 3, Lore: 1, Luck: 2, Initiative: 4 },
@@ -59,7 +59,7 @@ const HEROES = {
       defense: "4+",
       willpower: "4+",
       abilities: [
-        "Hunterâ€™s Reflexes: +1 Damage vs Beasts. +2 Initiative on first turn of an Ambush.",
+        "Hunter's Reflexes: +1 Damage vs Beasts. +2 Initiative on first turn of an Ambush.",
         "Primitive: May not use Guns, Books, or Tech Items.",
         "OtherWorld Native (Jargono): Starts with a Swamps of Jargono Personal Item. +3 Lore in Swamps of Jargono."
       ],
@@ -95,7 +95,7 @@ const HEROES = {
         "Distrustful: -1 Initiative per adjacent Hero (min 1).",
         "Danger Magnet: All Enemies gain 1 Elite ability. Add D3 Travel Hazards in Town."
       ],
-      items: ["Trusty Pistol", "Starting Upgrade", "Drifterâ€™s Secret"]
+      items: ["Trusty Pistol", "Starting Upgrade", "Drifter's Secret"]
     }
   }
 };
