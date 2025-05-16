@@ -10,6 +10,7 @@ document.addEventListener("DOMContentLoaded", () => {
     btn.addEventListener("click", () => showTab(btn.dataset.tab));
   });
 
+  console.log("HEROES.Western =", window.HEROES?.Western);
   const heroSelect = document.querySelector("#heroSelect");
   if (heroSelect && window.HEROES?.Western) {
     heroSelect.innerHTML = Object.keys(HEROES.Western).map(k => `<option value="${k}">${k}</option>`).join("");
