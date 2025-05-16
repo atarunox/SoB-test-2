@@ -1,6 +1,6 @@
 
-// Hero Tracker v0.1.01 - Draggable Character Sheet Panels with mobile support
-document.querySelector("h1")?.insertAdjacentHTML("beforeend", " <span style='font-size:0.7em'>(v0.1.01)</span>");
+// Hero Tracker v0.1.02 - Draggable Character Sheet Panels with mobile support
+document.querySelector("h1")?.insertAdjacentHTML("beforeend", " <span style='font-size:0.7em'>(v0.1.02)</span>");
 
 function log(msg) {
   const logArea = document.getElementById("debugLog") || (() => {
@@ -43,9 +43,14 @@ function renderSheetTab() {
   tab.innerHTML = "<h2>Character Sheet</h2>";
 
   const layout = [
+    createPanel("Base Stats", [
+      statDisplay("Agility", 3), statDisplay("Strength", 3), statDisplay("Cunning", 3),
+      statDisplay("Spirit", 3), statDisplay("Lore", 3), statDisplay("Luck", 3)
+    ]),
     createPanel("Vitals", [
       statAdjuster("Health", "Health"),
       statAdjuster("Sanity", "Sanity"),
+      statAdjuster("Grit", "Grit"),
       statDisplay("Defense", 4),
       statDisplay("Willpower", 4)
     ]),
