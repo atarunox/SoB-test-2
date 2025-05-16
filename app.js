@@ -1,4 +1,4 @@
-// Debugged Character Sheet app.js with panels and logging
+// Debug-enabled app.js with real stat values wired into the Character Sheet
 
 function log(msg) {
   const logArea = document.getElementById("debugLog") || (() => {
@@ -22,6 +22,12 @@ function log(msg) {
   logArea.appendChild(line);
 }
 
+let baseStats = {
+  Agility: 3, Strength: 3, Cunning: 3, Spirit: 3, Lore: 3, Luck: 3,
+  Initiative: 3, Combat: 3, Grit: 1, Willpower: 3, Defense: 3,
+  Health: 10, Sanity: 10
+};
+
 let currentStats = {
   Health: 10,
   Sanity: 10,
@@ -30,6 +36,11 @@ let currentStats = {
   Gold: 0,
   XP: 0
 };
+
+function calcStats() {
+  const stats = { ...baseStats };
+  return stats;
+}
 
 function showTab(id) {
   document.querySelectorAll('.tabContent').forEach(tab => tab.style.display = 'none');
@@ -43,7 +54,15 @@ function showTab(id) {
 function renderStatsTab() {
   log("renderStatsTab() called");
   const tab = document.getElementById("statsTab");
-  if (tab) tab.innerHTML = "<h3>Stats Tab Loaded</h3>";
+  const stats = calcStats();
+  if (tab) {
+    tab.innerHTML = "<h3>Stats Tab Loaded</h3>";
+    Object.entries(stats).forEach(([k, v]) => {
+      const div = document.createElement("div");
+      div.textContent = `${k}: ${v}`;
+      tab.appendChild(div);
+    });
+  }
 }
 
 function renderGearTab() {
@@ -67,14 +86,15 @@ function renderSkillTree() {
 function renderSheetTab() {
   log("renderSheetTab() called");
   const tab = document.getElementById("sheetTab");
+  const stats = calcStats();
   tab.innerHTML = "<h2>Character Sheet</h2>";
 
   const layout = [
     createPanel("Vitals", [
       statAdjuster("Health", "Health"),
       statAdjuster("Sanity", "Sanity"),
-      statDisplay("Defense", 3),
-      statDisplay("Willpower", 3)
+      statDisplay("Defense", stats.Defense),
+      statDisplay("Willpower", stats.Willpower)
     ]),
     createPanel("Resources", [
       statAdjuster("Dark Stone", "DarkStone"),
@@ -83,10 +103,10 @@ function renderSheetTab() {
       statAdjuster("Corruption", "Corruption")
     ]),
     createPanel("Combat Rolls", [
-      statDisplay("Combat", 3),
-      statDisplay("Initiative", 3),
-      statDisplay("To-Hit Melee", 6),
-      statDisplay("To-Hit Ranged", 6)
+      statDisplay("Combat", stats.Combat),
+      statDisplay("Initiative", stats.Initiative),
+      statDisplay("To-Hit Melee", stats.Combat + 3),
+      statDisplay("To-Hit Ranged", stats.Cunning + 3)
     ]),
     createPanel("Once per Adventure", [
       checkboxLine("Recover Grit"),
