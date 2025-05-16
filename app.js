@@ -37,6 +37,8 @@ document.querySelectorAll(".tabs button").forEach(btn => {
 btn.addEventListener("click", () => showTab(btn.dataset.tab));
 });
 
+  console.log("Dropdown ready:", window.HEROES?.Western);
+
 console.log("HEROES.Western =", window.HEROES?.Western);
 const heroSelect = document.querySelector("#heroSelect");
 if (heroSelect && window.HEROES?.Western) {
