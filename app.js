@@ -266,9 +266,10 @@ document.addEventListener("DOMContentLoaded", () => {
     currentStats.Sanity = hero.sanity;
     currentStats.Grit = hero.maxGrit;
 
-    renderStatsTab(); // Optional
-    renderSheetTab(); // ✅ This ensures the Character Sheet loads
-    showTab("sheetTab"); // Optional: auto-switch to Sheet tab
+    renderStatsTab();
+    renderSheetTab();
+    renderGearTab(); // ✅ Add this line
+    showTab("sheetTab");
   }
 });
 
