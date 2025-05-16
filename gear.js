@@ -22,7 +22,7 @@ export const gearList = [
   { id: "bone_mask", name: "Bone Mask", slot: "Face", effects: { Willpower: 1 }, darkStone: true },
 
   { id: "lucky_dice", name: "Lucky Dice", slot: "Extra 1", effects: { Luck: 2 }, upgradeSlots: 1 },
-  { id: "ancient_relic", name: "Ancient Relic", slot: "Extra 2", effects: { Lore: 2 }, darkStone: true }
+  { id: "ancient_relic", name: "Ancient Relic", slot: "Extra 2", effects: { Lore: 2 }, darkStone: true },
 
   { id: "test_helmet", name: "Helmet of Awareness", slot: "Head", effects: { Cunning: 2, Agility: 1 } },
 { id: "test_armor", name: "Heavy Armor", slot: "Torso", effects: { Health: 5, Defense: 1 } },
