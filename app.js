@@ -66,7 +66,7 @@ heroSelect.addEventListener("change", e => {
 });
 
 }
-}););
+});
 }
 
 renderStatsTab();
@@ -76,3 +76,4 @@ renderSkillTree();
 renderSheetTab();
 showTab("sheetTab");
 });
+
