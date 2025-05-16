@@ -99,3 +99,4 @@ window.HEROES = {
     }
   }
 };
+console.log("HEROES.js loaded:", window.HEROES);
