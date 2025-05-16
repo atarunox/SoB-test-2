@@ -1,0 +1,150 @@
+
+export const TOWN_LOCATIONS = {
+  "locations": [
+    {
+      "name": "Camp Site",
+      "description": "A basic location outside town where heroes can rest and recover.",
+      "services": [
+        "Stay overnight for $10 per day",
+        "Attempt to remove 1 Injury or Madness with a successful roll",
+        "Spend Grit to heal wounds or sanity",
+        "May scavenge for food or supplies"
+      ],
+      "notes": "Ideal for heroes who are unable or unwilling to stay in town. Limited services available compared to town locations."
+    },
+    {
+      "name": "Blacksmith",
+      "description": "Provides gear crafting, upgrades, and weapon/armor repair services.",
+      "services": [
+        "Purchase basic weapons and armor",
+        "Upgrade weapons (e.g., Damage +1, Critical +1)",
+        "Upgrade armor (e.g., Armor +4)",
+        "Repair broken items for $50",
+        "Purchase upgrade tokens"
+      ],
+      "items": [
+        { "name": "Iron Sword", "cost": 150, "effect": "+1 Damage" },
+        { "name": "Chainmail", "cost": 200, "effect": "+4 Armor" },
+        { "name": "Weapon Upgrade Token", "cost": 100, "effect": "Add +1 Damage" },
+        { "name": "Armor Upgrade Token", "cost": 100, "effect": "Add +1 Defense" }
+      ],
+      "notes": "Most upgrades are permanent and stack. All upgrade rolls are made after payment."
+    },
+    {
+      "name": "Church",
+      "description": "A spiritual haven where heroes may seek healing, blessings, and purification.",
+      "services": [
+        "Receive a Blessing (various types)",
+        "Gift of Healing – restore wounds and sanity",
+        "Exorcism of Madness – remove Madness for $150",
+        "Remove 1 point of Corruption for $250",
+        "Roll Spirit tests to activate advanced blessings"
+      ],
+      "items": [
+        { "name": "Blessing of Protection", "cost": 250, "effect": "Resistance +1 vs. Darkness" },
+        { "name": "Healing Ritual", "cost": 100, "effect": "Recover up to D6 Wounds/Sanity" }
+      ],
+      "notes": "Blessings are lost on a roll of 1 at the start of each adventure. Corruption removal has a 50% success rate unless performed by a High Priest."
+    },
+    {
+      "name": "Doc's Office",
+      "description": "Visit the town doctor for treatment of physical trauma, madness, and long-term conditions.",
+      "services": [
+        "Heal Wounds and Sanity for a small fee",
+        "Remove 1 Injury for $250",
+        "Remove 1 Madness for $250",
+        "Perform minor surgery (may have side effects)",
+        "Buy Medical Tonics and Injections"
+      ],
+      "items": [
+        { "name": "Medical Tonic", "cost": 100, "effect": "Recover D6 Health or Sanity" },
+        { "name": "Surgical Injection", "cost": 250, "effect": "Attempt to remove Injury or Madness" }
+      ],
+      "notes": "Surgical operations require a successful test. Failure may cause permanent stat loss or new Injury."
+    },
+    {
+      "name": "Frontier Outpost",
+      "description": "A fortified military hub where heroes may buy tactical gear, ammo, and receive combat training.",
+      "services": [
+        "Purchase military-grade gear and ranged weapons",
+        "Receive Combat Training (+1 Combat or Initiative)",
+        "Buy ammo and explosives",
+        "Acquire protective gear like armor vests and helmets"
+      ],
+      "items": [
+        { "name": "Ammo Box", "cost": 75, "effect": "Replenish all Ammo counters" },
+        { "name": "Field Medkit", "cost": 150, "effect": "Heal 1D6 Wounds or Sanity once per adventure" },
+        { "name": "Bulletproof Vest", "cost": 300, "effect": "+1 Defense, counts as Armor" },
+        { "name": "Grenade", "cost": 100, "effect": "Explosive, Range 3, Damage 2D6" }
+      ],
+      "notes": "Explosives may cause collateral damage. Combat Training requires a successful test (Cunning or Strength)."
+    },
+    {
+      "name": "Gambling Hall",
+      "description": "Test your luck at cards and dice. Risk gold and Grit for a chance at big payouts.",
+      "services": [
+        "Play poker, blackjack, or dice games",
+        "Wager gold for potential winnings",
+        "Bet Grit for risky returns",
+        "Special Gambler-only tables (if applicable)"
+      ],
+      "items": [
+        { "name": "Poker Game", "cost": "Variable", "effect": "D6 roll: Win $500 on a 6, Lose Grit on 1" },
+        { "name": "High Stakes Dice", "cost": 100, "effect": "Win $300 on 5+, Lose $200 on 1–2" }
+      ],
+      "notes": "May gamble once per visit. Roll may be modified by Luck or special abilities. Gambling is risky and may cause lasting consequences (e.g. gaining a Madness)."
+    },
+    {
+      "name": "General Store",
+      "description": "A common shop found in nearly every frontier town, stocked with basic adventuring goods.",
+      "services": [
+        "Buy general equipment and consumables",
+        "Purchase Side Bag Tokens (e.g., Bandages, Whiskey)",
+        "Restock Lantern Oil",
+        "Upgrade Side Bag capacity"
+      ],
+      "items": [
+        { "name": "Lantern Oil", "cost": 25, "effect": "Refill Lantern - required for continuing the adventure" },
+        { "name": "Shovel", "cost": 50, "effect": "Grants +1 to Search rolls involving graves or digging" },
+        { "name": "Rope", "cost": 40, "effect": "Used to bypass chasms or hazards, reusable" },
+        { "name": "Whiskey", "cost": 50, "effect": "Recover D6 Sanity when used" },
+        { "name": "Bandages", "cost": 50, "effect": "Recover D6 Wounds when used" }
+      ],
+      "notes": "This store carries many basic items required for survival and dungeon delving. Supply stock may vary between towns."
+    },
+    {
+      "name": "Indian Trading Post",
+      "description": "A mystical and spiritual location where rare gear, totems, and tribal items are exchanged.",
+      "services": [
+        "Purchase tribal gear and ceremonial items",
+        "Trade artifacts or rare loot",
+        "Participate in sacred rituals for stat bonuses",
+        "Receive spirit blessings or enhancements"
+      ],
+      "items": [
+        { "name": "Totem of the Bear", "cost": 300, "effect": "+1 Strength, once per adventure reduce Wounds by 2" },
+        { "name": "Sacred Bow", "cost": 400, "effect": "+3 Damage, Ranged weapon, Tribal Only" },
+        { "name": "Tribal Cloak", "cost": 250, "effect": "Ignore 1 hit per Adventure" },
+        { "name": "Spirit Charm", "cost": 150, "effect": "+1 to Willpower tests while equipped" }
+      ],
+      "notes": "Some items may only be used by Tribal or Native heroes. Special events may occur after a purchase or offering."
+    },
+    {
+      "name": "Saloon",
+      "description": "The heart of any frontier town — a place for gossip, games, drinking, and trouble.",
+      "services": [
+        "Buy drinks to recover Sanity or gain temporary buffs",
+        "Play small-stakes card games",
+        "Recruit allies or hire mercenaries",
+        "Gain information through Town Gossip (roll)"
+      ],
+      "items": [
+        { "name": "Whiskey Shot", "cost": 25, "effect": "Recover D3 Sanity" },
+        { "name": "Strong Drink", "cost": 50, "effect": "Recover D6 Sanity, then roll for intoxication" },
+        { "name": "Tales of Woe", "cost": 0, "effect": "Roll D6: on 5+, gain rumor or free Town Event reroll" },
+        { "name": "Hire Gunslinger", "cost": 200, "effect": "Join your posse for next adventure" }
+      ],
+      "notes": "Drinks may cause Madness or Corruption with poor rolls. Some Saloon Events are mandatory upon visit. Limit one strong drink per hero per visit."
+    }
+  ]
+};
