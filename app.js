@@ -52,7 +52,27 @@ function renderGearTab() {
     tab.innerHTML = "<p>No hero selected.</p>";
     return;
   }
+tab.innerHTML = `
+  <div class="quick-stats">
+    <div class="quick-tile">
+      <div class="label">Grit</div>
+      <div class="value">${currentStats.Grit}</div>
+    </div>
+    <div class="quick-tile">
+      <div class="label">Initiative</div>
+      <div class="value">${currentStats.Initiative}</div>
+    </div>
+    <div class="quick-tile">
+      <div class="label">Corruption</div>
+      <div class="value">${currentHero.corruption ?? 0}+</div>
+    </div>
+  </div>
 
+  <div class="character-sheet-grid" id="sheetSections" ondragover="event.preventDefault()">
+    ${renderDraggableSection("Vitals", `...`)}
+    ...
+  </div>
+`;
   // Initialize gear structure if not present
   currentHero.gear = currentHero.gear ?? {};
   currentHero.inventory = currentHero.inventory ?? [];
