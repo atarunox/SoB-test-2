@@ -1,6 +1,6 @@
 
-// Hero Tracker v0.1.08 - Draggable Character Sheet Panels with mobile support
-document.querySelector("h1")?.insertAdjacentHTML("beforeend", " <span style='font-size:0.7em'>(v0.1.08)</span>");
+// Hero Tracker v0.1.09 - Draggable Character Sheet Panels with mobile support
+document.querySelector("h1")?.insertAdjacentHTML("beforeend", " <span style='font-size:0.7em'>(v0.1.09)</span>");
 
 function log(msg) {
   const logArea = document.getElementById("debugLog") || (() => {
@@ -27,6 +27,31 @@ function log(msg) {
 let currentStats = {
   Health: 10, Sanity: 10, Corruption: 0, DarkStone: 0, Gold: 0, XP: 0
 };
+
+
+function renderGearTab() {
+  log("renderGearTab() called");
+  const tab = document.getElementById("gearTab");
+  tab.innerHTML = "<h3>Equipped Gear</h3><div style='color:green;'>Gear panel rendering test OK</div>";
+
+  const slots = ["Head", "Torso", "Shoulders", "Coat", "Gloves", "Hands", "Feet", "Pants", "Face", "Extra 1", "Extra 2"];
+  const equipped = {
+    "Head": { name: "Sturdy Hat" },
+    "Torso": { name: "Leather Vest" },
+    "Shoulders": { name: "Spiked Shoulders" },
+    "Coat": { name: "Duster Coat" },
+    "Gloves": { name: "Brass Knuckles" },
+    "Feet": { name: "Swift Boots" }
+  };
+
+  slots.forEach(slot => {
+    const div = document.createElement("div");
+    const item = equipped[slot];
+    div.innerHTML = "<strong>" + slot + "</strong>: " + (item ? item.name : "None");
+    tab.appendChild(div);
+  });
+}
+
 
 function showTab(id) {
   document.querySelectorAll('.tabContent').forEach(tab => tab.style.display = 'none');
