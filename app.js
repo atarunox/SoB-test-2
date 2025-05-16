@@ -23,12 +23,12 @@ function calcStats() {
 
 
 
-// Hero Tracker v0.1.11 â€” Restored working build with Gear + Character Sheet
+// Hero Tracker v0.1.12 â€” Restored working build with Gear + Character Sheet
 
 document.addEventListener("DOMContentLoaded", () => {
   const header = document.querySelector("h1");
-  if (header && !header.innerHTML.includes("v0.1.11")) {
-    header.innerHTML += " <span style='font-size:0.7em'>(v0.1.11)</span>";
+  if (header && !header.innerHTML.includes("v0.1.12")) {
+    header.innerHTML += " <span style='font-size:0.7em'>(v0.1.12)</span>";
   }
 
   document.querySelectorAll(".tabs button").forEach(btn => {
@@ -85,8 +85,10 @@ function renderStatsTab() {
 }
 
 function renderGearTab() {
+  log("renderGearTab() called");
   const tab = document.getElementById("gearTab");
-  tab.innerHTML = "<h3>Equipped Gear</h3><p style='color:green;'>Gear panel rendering test OK</p>";
+  tab.innerHTML = "<h3>Equipped Gear</h3>";
+
   const slots = ["Head", "Torso", "Shoulders", "Coat", "Gloves", "Hands", "Feet", "Pants", "Face", "Extra 1", "Extra 2"];
   const equipped = {
     "Head": { name: "Sturdy Hat" },
@@ -95,6 +97,41 @@ function renderGearTab() {
     "Coat": { name: "Duster Coat" },
     "Gloves": { name: "Brass Knuckles" },
     "Feet": { name: "Swift Boots" }
+  };
+
+  slots.forEach(slot => {
+    const div = document.createElement("div");
+    const item = equipped[slot];
+    div.innerHTML = "<strong>" + slot + "</strong>: " + (item ? item.name : "None");
+    tab.appendChild(div);
+  });
+
+  // Backpack section
+  const backpack = [
+    "Torch", "Pickaxe", "Bandages", "Lantern Oil", "Lucky Coin"
+  ];
+  const packHeader = document.createElement("h3");
+  packHeader.textContent = "Backpack";
+  tab.appendChild(packHeader);
+  backpack.forEach(item => {
+    const line = document.createElement("div");
+    line.textContent = item;
+    tab.appendChild(line);
+  });
+
+  // Side Bag section
+  const sideBag = [
+    "Whiskey", "Dynamite", "Bandages", "Herbs"
+  ];
+  const sideHeader = document.createElement("h3");
+  sideHeader.textContent = "Side Bag";
+  tab.appendChild(sideHeader);
+  sideBag.forEach(token => {
+    const line = document.createElement("div");
+    line.textContent = token;
+    tab.appendChild(line);
+  });
+}
   };
   slots.forEach(slot => {
     const div = document.createElement("div");
