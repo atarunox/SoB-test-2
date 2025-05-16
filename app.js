@@ -48,9 +48,9 @@ function renderSheetTab() {
       <div class="flex-row">
         <div>
           <p><strong>Max Health:</strong> ${hero.health}</p>
-          <p><strong>Current Health:</strong> <input type="number" id="currHealth" value="${hero.health}" min="0" max="${hero.health}" /></p>
+          <p><strong>Current Health:</strong> <input type="number" id="currHealth" value="${hero.currHealth ?? hero.health}" min="0" max="${hero.health}" /></p>
           <p><strong>Max Sanity:</strong> ${hero.sanity}</p>
-          <p><strong>Current Sanity:</strong> <input type="number" id="currSanity" value="${hero.sanity}" min="0" max="${hero.sanity}" /></p>
+          <p><strong>Current Sanity:</strong> <input type="number" id="currSanity" value="${hero.currSanity ?? hero.sanity}" min="0" max="${hero.sanity}" /></p>
         </div>
 
         <div>
@@ -97,6 +97,14 @@ function renderSheetTab() {
       </div>
     </div>
   `;
+
+  // Add listeners to update hero live
+  document.getElementById("currHealth").addEventListener("input", e => hero.currHealth = parseInt(e.target.value));
+  document.getElementById("currSanity").addEventListener("input", e => hero.currSanity = parseInt(e.target.value));
+  document.getElementById("xp").addEventListener("input", e => hero.xp = parseInt(e.target.value));
+  document.getElementById("gold").addEventListener("input", e => hero.gold = parseInt(e.target.value));
+  document.getElementById("darkstone").addEventListener("input", e => hero.darkstone = parseInt(e.target.value));
+  document.getElementById("corruption").addEventListener("input", e => hero.corruption = parseInt(e.target.value));
 }
 
 // --- Optional CSS ---
@@ -124,6 +132,7 @@ function renderSheetTab() {
   text-decoration: line-through;
 }
 */
+
 
 
 // --- DOM Ready Logic ---
