@@ -16,8 +16,62 @@ function renderStatsTab() {
 }
 
 function renderGearTab() {
-  document.getElementById("gearTab").innerHTML = "Gear TabPlaceholder";
+  const tab = document.getElementById("gearTab");
+  if (!currentHero) {
+    tab.innerHTML = "<p>No hero selected.</p>";
+    return;
+  }
+
+  // Initialize gear structure if not present
+  currentHero.gear = currentHero.gear ?? {};
+  currentHero.inventory = currentHero.inventory ?? [];
+
+  const gearSlots = ["Head", "Torso", "Coat", "Gloves", "Hands", "Pants", "Feet", "Shoulders", "Face", "Extra 1", "Extra 2"];
+
+  tab.innerHTML = `
+    <h2>Equipped Gear</h2>
+    <div class="gear-grid">
+      ${gearSlots.map(slot => {
+        const equipped = currentHero.gear[slot];
+        const gearName = equipped ? equipped.name : "—";
+        return `
+          <div class="gear-slot">
+            <label><strong>${slot}</strong></label>
+            <div>${gearName}</div>
+            <select onchange="equipGear('${slot}', this.value)">
+              <option value="">-- Equip from Inventory --</option>
+              ${currentHero.inventory
+                .filter(g => g.slot === slot)
+                .map(g => `<option value="${g.id}">${g.name}</option>`)
+                .join("")}
+            </select>
+          </div>
+        `;
+      }).join("")}
+    </div>
+
+    <h2>Inventory</h2>
+    <ul>
+      ${currentHero.inventory.length === 0 ? "<li>(Empty)</li>" : currentHero.inventory.map(g => `<li>${g.name}</li>`).join("")}
+    </ul>
+  `;
 }
+
+// Equip handler (attach globally)
+window.equipGear = function (slot, gearId) {
+  if (!gearId) return;
+
+  const gear = gearList.find(g => g.id === gearId);
+  if (!gear) return;
+
+  // Remove from inventory and assign to slot
+  currentHero.inventory = currentHero.inventory.filter(g => g.id !== gearId);
+  currentHero.gear[slot] = gear;
+
+  renderGearTab(); // re-render
+  renderStatsTab(); // update stats if needed
+};
+
 
 function renderConditionsTab() {
   document.getElementById("conditionsTab").innerHTML = "Conditions TabPlaceholder";
