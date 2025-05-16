@@ -1,6 +1,6 @@
 
-// Hero Tracker v0.1.05 - Draggable Character Sheet Panels with mobile support
-document.querySelector("h1")?.insertAdjacentHTML("beforeend", " <span style='font-size:0.7em'>(v0.1.05)</span>");
+// Hero Tracker v0.1.06 - Draggable Character Sheet Panels with mobile support
+document.querySelector("h1")?.insertAdjacentHTML("beforeend", " <span style='font-size:0.7em'>(v0.1.06)</span>");
 
 function log(msg) {
   const logArea = document.getElementById("debugLog") || (() => {
