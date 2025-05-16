@@ -1,0 +1,111 @@
+{
+  "Western": {
+    "Bandida": {
+      "stats": { "Agility": 3, "Cunning": 4, "Spirit": 2, "Strength": 2, "Lore": 1, "Luck": 4, "Initiative": 4 },
+      "combat": 2,
+      "maxGrit": 2,
+      "toHit": { "ranged": "4+", "melee": "5+" },
+      "health": 10,
+      "sanity": 12,
+      "defense": "4+",
+      "willpower": "4+",
+      "abilities": [
+        "Wild Card: Recover a Grit on a Move roll of 1 or 2.",
+        "Dynamite Lover: Can carry extra Dynamite and throw farther.",
+        "Street Nerves: Once per turn, re-roll 1 failed Willpower save.",
+        "Swindler: Pay D6x$25 less for a Town Item/Service once per Town Stay.",
+        "Sinister Laugh: On killing blow, roll D6. On 5+, recover 1 Grit."
+      ],
+      "items": ["Pistol", "Dynamite", "Bandida Hat"]
+    },
+    "Gunslinger": {
+      "stats": { "Agility": 4, "Cunning": 3, "Spirit": 2, "Strength": 2, "Lore": 2, "Luck": 3, "Initiative": 6 },
+      "combat": 2,
+      "maxGrit": 2,
+      "toHit": { "ranged": "3+", "melee": "5+" },
+      "health": 10,
+      "sanity": 12,
+      "defense": "4+",
+      "willpower": "4+",
+      "abilities": [
+        "Quick and the Dead: Uses the Six Shooter Template. Starts fully loaded with 6 Dead Eye Shot bullets.",
+        "Quickdraw: May attack before enemies during Ambush. Gun attacks only.",
+        "Reload: Reload bullets into the Six Shooter Template during adventures.",
+        "High Damage Output: Doubles base Shots from New Gun card (not extra upgrades).",
+        "Frail Body: Gains Health slowly when leveling up. Can offset with gear."
+      ],
+      "items": ["Six Shooter", "Whiskey", "Quickdraw Holster"]
+    },
+    "Prospector": {
+      "stats": { "Agility": 1, "Cunning": 2, "Spirit": 2, "Strength": 4, "Lore": 3, "Luck": 3, "Initiative": 2 },
+      "combat": 2,
+      "maxGrit": 2,
+      "toHit": { "ranged": "5+", "melee": "4+" },
+      "health": 16,
+      "sanity": 14,
+      "defense": "4+",
+      "willpower": "5+",
+      "abilities": [
+        "Comforting Presence: At the end of the Hero Turn, may heal 1 Wound or 1 Sanity from every adjacent Hero. Gain 5 XP per point healed.",
+        "Lightweight: May only use Guns with the 'Light' keyword.",
+        "Fast: +1 Move",
+        "Gold Sense: Draw 1 extra Loot card when finding Gold.",
+        "Explosive Expert: May carry and throw 1 additional Dynamite."
+      ],
+      "items": ["Hold-out Pistol", "Dynamite", "Pickaxe"]
+    },
+    "Saloon Girl": {
+      "stats": { "Agility": 3, "Cunning": 4, "Spirit": 3, "Strength": 2, "Lore": 2, "Luck": 3, "Initiative": 4 },
+      "combat": 2,
+      "maxGrit": 2,
+      "toHit": { "ranged": "4+", "melee": "4+" },
+      "health": 12,
+      "sanity": 14,
+      "defense": "4+",
+      "willpower": "4+",
+      "abilities": [
+        "Comforting Presence: At the end of the Hero Turn, may heal 1 Wound or 1 Sanity from each adjacent Hero. Gain 5 XP per point healed.",
+        "Lightweight: May only use Guns with the 'Light' keyword.",
+        "Fast: +1 Move",
+        "Disarming Charm: Enemies must re-roll successful To-Hit rolls against this Hero once per turn.",
+        "Fame and Flash: Once per Adventure, recover 1 Grit and 1 Sanity when using a Show move."
+      ],
+      "items": ["Hold-out Pistol", "Fan", "Show Dress"]
+    },
+    "US Marshal": {
+      "stats": { "Agility": 2, "Cunning": 2, "Spirit": 3, "Strength": 4, "Lore": 1, "Luck": 3, "Initiative": 3 },
+      "combat": 2,
+      "maxGrit": 2,
+      "toHit": { "ranged": "4+", "melee": "4+" },
+      "health": 14,
+      "sanity": 12,
+      "defense": "3+",
+      "willpower": "4+",
+      "abilities": [
+        "Double-Shot (Shotgun): Once per turn, when you kill an Enemy with a Shotgun, you gain +1 Shot with that Shotgun.",
+        "Cleaning Up the West: Heal 1 Health and 1 Sanity when defeating an Enemy. +XP from cleanup.",
+        "Hardened Resolve: Heal nearby allies and gain bonus to Sanity. Strong team leader archetype.",
+        "Marshal’s Badge: Once per Adventure, give all Heroes +1 Initiative or +1 Grit until end of Turn."
+      ],
+      "items": ["Shotgun", "US Marshal Badge"]
+    },
+    "Wandering Samurai": {
+      "stats": { "Agility": 3, "Cunning": 2, "Spirit": 3, "Strength": 4, "Lore": 2, "Luck": 2, "Initiative": 3 },
+      "combat": 3,
+      "maxGrit": 2,
+      "toHit": { "ranged": "—", "melee": "3+" },
+      "health": 14,
+      "sanity": 12,
+      "defense": "4+",
+      "willpower": "4+",
+      "abilities": [
+        "Samurai Battle Tactics: Starts with 2 random Battle Tactics (draw 3, choose 2). Each can only be used once per turn.",
+        "Battle Fury: Any time you deal 1 or more Wounds with a Combat Hit, gain 1 Fury Token.",
+        "Code of Honor: May not use Guns or Explosives. Cannot voluntarily Flee from an Adventure.",
+        "Sword Mastery: Master of hand-to-hand weapons. Can wield even heavy weapons with precision.",
+        "Quiet Traveler: Balanced stats and calm focus. +1 Initiative on Ambush rounds."
+      ],
+      "items": ["Katana", "Fury Token", "Tactical Garb"]
+    }
+  }
+}
