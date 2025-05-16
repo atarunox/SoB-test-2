@@ -195,3 +195,6 @@ function renderStatsTab() {
     });
   }
 }
+
+// Add app version to header
+document.querySelector("h1")?.insertAdjacentHTML("beforeend", " <span style='font-size:0.7em'>(v0.9.2)</span>");
