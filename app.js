@@ -66,12 +66,27 @@ window.equipGear = function (slot, gearId) {
   if (!gear) return;
 
   // Remove from inventory and assign to slot
-  currentHero.inventory = currentHero.inventory.filter(g => g.id !== gearId);
-  currentHero.gear[slot] = gear;
+  window.equipGear = function (slot, gearId) {
+  if (gearId === "") {
+    if (currentHero.gear[slot]) {
+      currentHero.inventory.push(currentHero.gear[slot]); // return to inventory
+      delete currentHero.gear[slot];
+    }
+  } else {
+    const gear = gearList.find(g => g.id === gearId);
+    if (!gear) return;
 
-  renderGearTab(); // re-render
-  renderStatsTab(); // update stats if needed
+    currentHero.inventory = currentHero.inventory.filter(g => g.id !== gearId);
+    if (currentHero.gear[slot]) {
+      currentHero.inventory.push(currentHero.gear[slot]); // swap out old
+    }
+    currentHero.gear[slot] = gear;
+  }
+
+  renderGearTab();
+  renderStatsTab();
 };
+
 
 
 function renderConditionsTab() {
