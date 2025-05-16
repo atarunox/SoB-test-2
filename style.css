@@ -1,0 +1,22 @@
+/* --- Character Sheet Grid Layout --- */ .character-sheet-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; padding: 1rem; background: url('https://www.transparenttextures.com/patterns/paper-fibers.png') repeat #f6edd9; border-radius: 12px; font-family: Georgia, serif; box-sizing: border-box; }
+
+.tile { background: #f4e6c1; border: 1px solid #988464; border-radius: 6px; box-shadow: 2px 2px 5px rgba(0,0,0,0.15); padding: 1rem; display: flex; flex-direction: column; justify-content: flex-start; }
+
+.tile-header { font-size: 1.25rem; font-weight: bold; border-bottom: 1px solid #a29074; margin-bottom: 0.5rem; padding-bottom: 0.25rem; letter-spacing: 0.5px; }
+
+.tile-content p, .tile-content li { margin: 0.25rem 0; font-size: 1rem; display: flex; justify-content: space-between; }
+
+.tile-content p strong, .tile-content li strong { font-weight: 600; }
+
+.stats-grid p { border-bottom: 1px solid #d2c4aa; padding: 0.25rem 0; }
+
+.stats-grid span { font-weight: bold; }
+
+/* --- Grit Bubbles / Corruption Dots --- */ .grit-bubbles { display: flex; gap: 0.3rem; margin-top: 0.25rem; }
+
+.grit-bubbles span { width: 14px; height: 14px; border-radius: 50%; border: 1px solid #333; background-color: #fff; display: inline-block; }
+
+.grit-bubbles span.filled { background-color: #333; }
+
+/* --- Responsive Behavior --- */ @media (max-width: 600px) { .character-sheet-grid { grid-template-columns: 1fr; } }
+
