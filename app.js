@@ -39,12 +39,13 @@ function renderGearTab() {
             <label><strong>${slot}</strong></label>
             <div>${gearName}</div>
             <select onchange="equipGear('${slot}', this.value)">
-              <option value="">-- Equip from Inventory --</option>
-              ${currentHero.inventory
-                .filter(g => g.slot === slot)
-                .map(g => `<option value="${g.id}">${g.name}</option>`)
-                .join("")}
-            </select>
+  <option value="">(Empty)</option>
+  ${currentHero.inventory
+    .filter(g => g.slot === slot)
+    .map(g => `<option value="${g.id}">${g.name}</option>`)
+    .join("")}
+</select>
+
           </div>
         `;
       }).join("")}
