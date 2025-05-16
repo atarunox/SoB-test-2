@@ -37,11 +37,20 @@ document.querySelectorAll(".tabs button").forEach(btn => {
 btn.addEventListener("click", () => showTab(btn.dataset.tab));
 });
 
-  console.log("Dropdown ready:", window.HEROES?.Western);
-
 console.log("HEROES.Western =", window.HEROES?.Western);
+function waitForHeroes(callback, retries = 10) {
+if (window.HEROES?.Western) {
+callback();
+} else if (retries > 0) {
+setTimeout(() => waitForHeroes(callback, retries - 1), 100);
+} else {
+console.error("HEROES.Western not found");
+}
+}
+
+waitForHeroes(() => {
 const heroSelect = document.querySelector("#heroSelect");
-if (heroSelect && window.HEROES?.Western) {
+if (heroSelect) {
 heroSelect.innerHTML = Object.keys(HEROES.Western)
 .map(k => <option value="${k}">${k}</option>)
 .join("");
@@ -56,6 +65,8 @@ heroSelect.addEventListener("change", e => {
   }
 });
 
+}
+}););
 }
 
 renderStatsTab();
