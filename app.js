@@ -42,7 +42,7 @@ function renderSheetTab() {
   }
 
   tab.innerHTML = `
-    <div class="character-sheet" id="sheetSections" ondragover="event.preventDefault()">
+    <div class="character-sheet-grid" id="sheetSections" ondragover="event.preventDefault()">
       <h2>${selectedHeroName}</h2>
 
       ${renderDraggableSection("Vitals", `
@@ -116,7 +116,10 @@ function renderDraggableSection(title, content) {
 
 // --- Optional CSS ---
 /*
-.character-sheet {
+.character-sheet-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1em;
   font-family: sans-serif;
   background: #f9f6ec;
   padding: 1em;
@@ -145,9 +148,10 @@ function renderDraggableSection(title, content) {
 .draggable-section {
   margin-bottom: 1em;
   padding: 0.5em;
-  border: 1px dashed #ccc;
+  border: 1px solid #aaa;
   border-radius: 4px;
   background-color: #fff;
+  box-shadow: 1px 1px 5px rgba(0,0,0,0.1);
 }
 */
 
