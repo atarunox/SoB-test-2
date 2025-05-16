@@ -1,4 +1,4 @@
-// Debug-enabled app.js with real stat values wired into the Character Sheet
+// SoB Tracker with gear + skill stat modifiers in calcStats()
 
 function log(msg) {
   const logArea = document.getElementById("debugLog") || (() => {
@@ -37,8 +37,42 @@ let currentStats = {
   XP: 0
 };
 
+const gearList = [
+  { id: "vest", name: "Leather Vest", slot: "Torso", effects: { Defense: 1 } },
+  { id: "boots", name: "Swift Boots", slot: "Feet", effects: { Agility: 1 } }
+];
+const equipped = {
+  Torso: gearList[0],
+  Feet: gearList[1]
+};
+
+const skillTree = [
+  {
+    path: "Gladiator",
+    skills: [
+      { name: "Brawlerâ€™s Strength", effects: { Combat: 1 } },
+      { name: "Battle Focus", effects: { Willpower: 1 } }
+    ]
+  }
+];
+const selectedSkills = ["Gladiator-0", "Gladiator-1"];
+
 function calcStats() {
   const stats = { ...baseStats };
+  Object.values(equipped).forEach(item => {
+    Object.entries(item.effects).forEach(([stat, val]) => {
+      if (stats[stat] != null) stats[stat] += val;
+    });
+  });
+  selectedSkills.forEach(key => {
+    const [path, i] = key.split("-");
+    const skill = skillTree.find(p => p.path === path)?.skills[+i];
+    if (skill?.effects) {
+      Object.entries(skill.effects).forEach(([stat, val]) => {
+        if (stats[stat] != null) stats[stat] += val;
+      });
+    }
+  });
   return stats;
 }
 
@@ -49,38 +83,6 @@ function showTab(id) {
     target.style.display = 'block';
     log("Switched to tab: " + id);
   }
-}
-
-function renderStatsTab() {
-  log("renderStatsTab() called");
-  const tab = document.getElementById("statsTab");
-  const stats = calcStats();
-  if (tab) {
-    tab.innerHTML = "<h3>Stats Tab Loaded</h3>";
-    Object.entries(stats).forEach(([k, v]) => {
-      const div = document.createElement("div");
-      div.textContent = `${k}: ${v}`;
-      tab.appendChild(div);
-    });
-  }
-}
-
-function renderGearTab() {
-  log("renderGearTab() called");
-  const tab = document.getElementById("gearTab");
-  if (tab) tab.innerHTML = "<h3>Gear Tab Loaded</h3>";
-}
-
-function renderConditionsTab() {
-  log("renderConditionsTab() called");
-  const tab = document.getElementById("conditionsTab");
-  if (tab) tab.innerHTML = "<h3>Conditions Tab Loaded</h3>";
-}
-
-function renderSkillTree() {
-  log("renderSkillTree() called");
-  const tab = document.getElementById("treeTab");
-  if (tab) tab.innerHTML = "<h3>Skill Tree Loaded</h3>";
 }
 
 function renderSheetTab() {
@@ -107,15 +109,6 @@ function renderSheetTab() {
       statDisplay("Initiative", stats.Initiative),
       statDisplay("To-Hit Melee", stats.Combat + 3),
       statDisplay("To-Hit Ranged", stats.Cunning + 3)
-    ]),
-    createPanel("Once per Adventure", [
-      checkboxLine("Recover Grit"),
-      checkboxLine("Use Healing Herb")
-    ]),
-    createPanel("Conditions", [
-      statDisplay("Mutation", "None"),
-      statDisplay("Injury", "None"),
-      statDisplay("Madness", "None")
     ])
   ];
 
@@ -156,24 +149,16 @@ function statDisplay(label, value) {
   return row;
 }
 
-function checkboxLine(label) {
-  const line = document.createElement("div");
-  const check = document.createElement("input");
-  check.type = "checkbox";
-  line.appendChild(check);
-  line.appendChild(document.createTextNode(" " + label));
-  return line;
-}
-
-window.addEventListener("error", function(e) {
-  log("JS ERROR: " + e.message + " at " + e.filename + ":" + e.lineno);
-});
-
 document.addEventListener("DOMContentLoaded", () => {
   try {
     document.querySelectorAll(".tabs button").forEach(btn => {
       btn.addEventListener("click", () => showTab(btn.dataset.tab));
     });
+    renderStatsTab = () => log("Stats not implemented");
+    renderGearTab = () => log("Gear not implemented");
+    renderConditionsTab = () => log("Conditions not implemented");
+    renderSkillTree = () => log("Skill tree not implemented");
+
     renderStatsTab();
     renderGearTab();
     renderConditionsTab();
