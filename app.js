@@ -3,6 +3,35 @@ let currentHero = null;
 let selectedHeroName = "";
 let currentStats = {}; // <-- optional if still used
 
+function calculateCurrentStats(hero) {
+  const base = { ...hero.stats };
+  const bonuses = {};
+
+  if (hero.gear) {
+    Object.values(hero.gear).forEach(item => {
+      if (item?.effects) {
+        for (const [key, value] of Object.entries(item.effects)) {
+          bonuses[key] = (bonuses[key] || 0) + value;
+        }
+      }
+    });
+  }
+
+  const result = {};
+  for (const key of Object.keys(base)) {
+    result[key] = base[key] + (bonuses[key] || 0);
+  }
+
+  result.Health = hero.health + (bonuses.Health || 0);
+  result.Sanity = hero.sanity + (bonuses.Sanity || 0);
+  result.Grit = hero.maxGrit + (bonuses.Grit || 0);
+  result.Defense = hero.defense; // Not numeric — don’t apply math
+  result.Willpower = hero.willpower;
+
+  return result;
+}
+
+
 function renderStatsTab() {
   const tab = document.getElementById("statsTab");
   tab.innerHTML = `
@@ -76,8 +105,10 @@ window.equipGear = function (slot, gearId) {
     currentHero.gear[slot] = gear;
   }
 
-  renderGearTab();
-  renderStatsTab();
+  currentStats = calculateCurrentStats(currentHero);
+renderGearTab();
+renderStatsTab();
+
 };
 
 
@@ -262,9 +293,8 @@ document.addEventListener("DOMContentLoaded", () => {
     selectedHeroName = heroName;
     currentHero = hero;
 
-    currentStats.Health = hero.health;
-    currentStats.Sanity = hero.sanity;
-    currentStats.Grit = hero.maxGrit;
+    currentStats = calculateCurrentStats(hero);
+
 
     renderStatsTab();
     renderSheetTab();
