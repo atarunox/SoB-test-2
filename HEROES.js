@@ -1,6 +1,6 @@
 
 // heroes.js - Western heroes
-const HEROES = {
+window.HEROES = {
   "Western": {
     "Trederran Veteran": {
       stats: { Agility: 2, Cunning: 3, Spirit: 2, Strength: 3, Lore: 1, Luck: 4, Initiative: 4 },
