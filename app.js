@@ -1,7 +1,7 @@
 
 // Version 0.9.3 - Cleaned app.js with working tabs and stat bonuses
 
-document.querySelector("h1")?.insertAdjacentHTML("beforeend", " <span style='font-size:0.7em'>(v0.9.3)</span>");
+document.querySelector("h1")?.insertAdjacentHTML("beforeend", " <span style='font-size:0.7em'>(v0.9.4)</span>");
 
 function log(msg) {
   const logArea = document.getElementById("debugLog") || (() => {
@@ -206,3 +206,32 @@ document.addEventListener("DOMContentLoaded", () => {
     log("INIT ERROR: " + err.message);
   }
 });
+
+
+
+function enablePanelDrag(container) {
+  let dragSrc = null;
+
+  container.querySelectorAll(".panel").forEach(panel => {
+    panel.setAttribute("draggable", "true");
+
+    panel.addEventListener("dragstart", e => {
+      dragSrc = panel;
+      panel.classList.add("dragging");
+    });
+
+    panel.addEventListener("dragover", e => {
+      e.preventDefault();
+      const panels = Array.from(container.querySelectorAll(".panel")).filter(p => p !== dragSrc);
+      const after = panels.find(p => e.clientY < p.getBoundingClientRect().top + p.offsetHeight / 2);
+      if (after) container.insertBefore(dragSrc, after);
+      else container.appendChild(dragSrc);
+    });
+
+    panel.addEventListener("dragend", () => {
+      panel.classList.remove("dragging");
+    });
+  });
+}
+
+renderSheetTab(); enablePanelDrag(document.getElementById("sheetTab"));
