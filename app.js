@@ -1,4 +1,5 @@
-// DEBUG MODE ENABLED
+// Debugged Character Sheet app.js with panels and logging
+
 function log(msg) {
   const logArea = document.getElementById("debugLog") || (() => {
     const box = document.createElement("div");
@@ -21,7 +22,15 @@ function log(msg) {
   logArea.appendChild(line);
 }
 
-// Minimal setup just to confirm each render function loads
+let currentStats = {
+  Health: 10,
+  Sanity: 10,
+  Corruption: 0,
+  DarkStone: 0,
+  Gold: 0,
+  XP: 0
+};
+
 function showTab(id) {
   document.querySelectorAll('.tabContent').forEach(tab => tab.style.display = 'none');
   const target = document.getElementById(id);
@@ -58,7 +67,82 @@ function renderSkillTree() {
 function renderSheetTab() {
   log("renderSheetTab() called");
   const tab = document.getElementById("sheetTab");
-  if (tab) tab.innerHTML = "<h3>Character Sheet Loaded</h3>";
+  tab.innerHTML = "<h2>Character Sheet</h2>";
+
+  const layout = [
+    createPanel("Vitals", [
+      statAdjuster("Health", "Health"),
+      statAdjuster("Sanity", "Sanity"),
+      statDisplay("Defense", 3),
+      statDisplay("Willpower", 3)
+    ]),
+    createPanel("Resources", [
+      statAdjuster("Dark Stone", "DarkStone"),
+      statAdjuster("Gold", "Gold"),
+      statAdjuster("XP", "XP"),
+      statAdjuster("Corruption", "Corruption")
+    ]),
+    createPanel("Combat Rolls", [
+      statDisplay("Combat", 3),
+      statDisplay("Initiative", 3),
+      statDisplay("To-Hit Melee", 6),
+      statDisplay("To-Hit Ranged", 6)
+    ]),
+    createPanel("Once per Adventure", [
+      checkboxLine("Recover Grit"),
+      checkboxLine("Use Healing Herb")
+    ]),
+    createPanel("Conditions", [
+      statDisplay("Mutation", "None"),
+      statDisplay("Injury", "None"),
+      statDisplay("Madness", "None")
+    ])
+  ];
+
+  layout.forEach(p => tab.appendChild(p));
+}
+
+function createPanel(title, elements) {
+  const panel = document.createElement("div");
+  panel.className = "panel";
+  const header = document.createElement("h3");
+  header.textContent = title;
+  panel.appendChild(header);
+  elements.forEach(el => panel.appendChild(el));
+  return panel;
+}
+
+function statAdjuster(label, key) {
+  const row = document.createElement("div");
+  const minus = document.createElement("button");
+  minus.textContent = "-";
+  minus.onclick = () => { currentStats[key] = Math.max(0, currentStats[key] - 1); renderSheetTab(); };
+  const val = document.createElement("span");
+  val.textContent = currentStats[key];
+  val.style.margin = "0 8px";
+  const plus = document.createElement("button");
+  plus.textContent = "+";
+  plus.onclick = () => { currentStats[key]++; renderSheetTab(); };
+  row.textContent = `${label}: `;
+  row.appendChild(minus);
+  row.appendChild(val);
+  row.appendChild(plus);
+  return row;
+}
+
+function statDisplay(label, value) {
+  const row = document.createElement("div");
+  row.textContent = `${label}: ${value ?? "-"}`;
+  return row;
+}
+
+function checkboxLine(label) {
+  const line = document.createElement("div");
+  const check = document.createElement("input");
+  check.type = "checkbox";
+  line.appendChild(check);
+  line.appendChild(document.createTextNode(" " + label));
+  return line;
 }
 
 window.addEventListener("error", function(e) {
