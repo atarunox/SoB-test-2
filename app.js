@@ -1,6 +1,6 @@
 
-// Hero Tracker v0.1.03 - Draggable Character Sheet Panels with mobile support
-document.querySelector("h1")?.insertAdjacentHTML("beforeend", " <span style='font-size:0.7em'>(v0.1.03)</span>");
+// Hero Tracker v0.1.04 - Draggable Character Sheet Panels with mobile support
+document.querySelector("h1")?.insertAdjacentHTML("beforeend", " <span style='font-size:0.7em'>(v0.1.04)</span>");
 
 function log(msg) {
   const logArea = document.getElementById("debugLog") || (() => {
@@ -143,3 +143,18 @@ document.addEventListener("DOMContentLoaded", () => {
     log("INIT ERROR: " + err.message);
   }
 });
+
+
+function renderGearTab() {
+  log("renderGearTab() called");
+  const tab = document.getElementById("gearTab");
+  tab.innerHTML = "<h3>Equipped Gear</h3>";
+
+  const slots = ["Head", "Torso", "Feet"];
+  slots.forEach(slot => {
+    const div = document.createElement("div");
+    const item = equipped[slot];
+    div.innerHTML = `<strong>${slot}</strong>: ${item ? item.name : "None"}`;
+    tab.appendChild(div);
+  });
+}
