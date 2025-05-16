@@ -23,9 +23,99 @@ function renderSkillTree() {
   document.getElementById("treeTab").innerHTML = "Skill Tree TabPlaceholder";
 }
 
+// --- Character Sheet Tab ---
 function renderSheetTab() {
-  document.getElementById("sheetTab").innerHTML = "Character SheetPlaceholder";
+  const tab = document.getElementById("sheetTab");
+  const hero = currentHero;
+  if (!hero) {
+    tab.innerHTML = "<p>No hero selected.</p>";
+    return;
+  }
+
+  tab.innerHTML = `
+    <div class="character-sheet">
+      <h2>${selectedHeroName}</h2>
+
+      <div class="flex-row">
+        <div>
+          <p><strong>Max Health:</strong> ${hero.health}</p>
+          <p><strong>Current Health:</strong> <input type="number" id="currHealth" value="${hero.health}" min="0" max="${hero.health}" /></p>
+          <p><strong>Max Sanity:</strong> ${hero.sanity}</p>
+          <p><strong>Current Sanity:</strong> <input type="number" id="currSanity" value="${hero.sanity}" min="0" max="${hero.sanity}" /></p>
+        </div>
+
+        <div>
+          <p><strong>XP:</strong> <input type="number" id="xp" value="${hero.xp ?? 0}" /></p>
+          <p><strong>Gold:</strong> <input type="number" id="gold" value="${hero.gold ?? 0}" /></p>
+          <p><strong>Dark Stone:</strong> <input type="number" id="darkstone" value="${hero.darkstone ?? 0}" /></p>
+          <p><strong>Corruption:</strong> <input type="number" id="corruption" value="${hero.corruption ?? 0}" max="5" /></p>
+        </div>
+      </div>
+
+      <div class="flex-row">
+        <div>
+          <h3>Combat</h3>
+          <p><strong>Combat:</strong> ${hero.combat}</p>
+          <p><strong>Initiative:</strong> ${hero.stats?.Initiative ?? "—"}</p>
+          <p><strong>Defense:</strong> ${hero.defense}</p>
+          <p><strong>Willpower:</strong> ${hero.willpower}</p>
+          <p><strong>Ranged To-Hit:</strong> ${hero.toHit.ranged}</p>
+          <p><strong>Melee To-Hit:</strong> ${hero.toHit.melee}</p>
+        </div>
+
+        <div>
+          <h3>Core Stats</h3>
+          <ul>
+            ${Object.entries(hero.stats).map(([key, val]) => `<li><strong>${key}:</strong> ${val}</li>`).join("")}
+          </ul>
+        </div>
+      </div>
+
+      <div>
+        <h3>Abilities</h3>
+        <ul>${hero.abilities.map(a => `<li>${a}</li>`).join("")}</ul>
+      </div>
+
+      <div>
+        <h3>Starting Gear</h3>
+        <ul>${hero.items.map(i => `<li>${i}</li>`).join("")}</ul>
+      </div>
+
+      <div>
+        <h3>Adventure Toggles</h3>
+        <button onclick="this.classList.toggle('used')">Ability 1 (Once per Adventure)</button>
+        <button onclick="this.classList.toggle('used')">Item Use (Once per Adventure)</button>
+      </div>
+    </div>
+  `;
 }
+
+// --- Optional CSS ---
+/*
+.character-sheet {
+  font-family: sans-serif;
+  background: #f9f6ec;
+  padding: 1em;
+  border-radius: 8px;
+}
+
+.flex-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 2em;
+  margin-bottom: 1em;
+}
+
+.flex-row div {
+  flex: 1;
+}
+
+.used {
+  background: #999;
+  text-decoration: line-through;
+}
+*/
+
 
 // --- DOM Ready Logic ---
 document.addEventListener("DOMContentLoaded", () => {
