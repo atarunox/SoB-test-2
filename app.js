@@ -1,3 +1,10 @@
+const gearList = [
+  { id: "test_helmet", name: "Helmet of Awareness", slot: "Head", effects: { Cunning: 2, Agility: 1 } },
+  { id: "test_armor", name: "Heavy Armor", slot: "Torso", effects: { Health: 5, Defense: 1 } },
+  { id: "test_gauntlet", name: "Gauntlet of Might", slot: "Gloves", effects: { Strength: 3 } },
+  { id: "test_boots", name: "Boots of the Wind", slot: "Feet", effects: { Agility: 3, Initiative: 1 } },
+  { id: "test_focusring", name: "Ring of Focus", slot: "Extra 1", effects: { Lore: 2, Spirit: 1 } }
+];
 // --- Tab Render Functions ---
 let currentHero = null;
 let selectedHeroName = "";
