@@ -142,8 +142,31 @@ function renderGearTab() {
 }
 
 function renderConditionsTab() {
+  log("renderConditionsTab() called");
   const tab = document.getElementById("conditionsTab");
-  tab.innerHTML = "<h3>Conditions Tab</h3><p>Placeholder</p>";
+  tab.innerHTML = "<h3>Conditions</h3>";
+
+  const sections = {
+    "Mutations": ["Chitinous Shell", "Tentacle Arm"],
+    "Injuries": ["Broken Arm", "Cracked Ribs"],
+    "Madness": ["Night Terrors", "Paranoia"]
+  };
+
+  Object.entries(sections).forEach(([type, list]) => {
+    const header = document.createElement("h4");
+    header.textContent = type;
+    tab.appendChild(header);
+
+    list.forEach(item => {
+      const div = document.createElement("div");
+      const check = document.createElement("input");
+      check.type = "checkbox";
+      check.disabled = true;
+      div.appendChild(check);
+      div.appendChild(document.createTextNode(" " + item));
+      tab.appendChild(div);
+    });
+  });
 }
 
 function renderSkillTree() {
