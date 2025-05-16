@@ -93,7 +93,7 @@ function renderGearTab() {
 window.equipGear = function (slot, gearId) {
   if (gearId === "") {
     if (currentHero.gear[slot]) {
-      currentHero.inventory.push(currentHero.gear[slot]); // return to inventory
+      currentHero.inventory.push(currentHero.gear[slot]);
       delete currentHero.gear[slot];
     }
   } else {
@@ -102,14 +102,17 @@ window.equipGear = function (slot, gearId) {
 
     currentHero.inventory = currentHero.inventory.filter(g => g.id !== gearId);
     if (currentHero.gear[slot]) {
-      currentHero.inventory.push(currentHero.gear[slot]); // swap out old
+      currentHero.inventory.push(currentHero.gear[slot]);
     }
     currentHero.gear[slot] = gear;
   }
 
-  currentStats = calculateCurrentStats(currentHero);
-renderGearTab();
-renderStatsTab();
+  // ✅ Update this part
+  currentStats = calculateCurrentStats(currentHero); // recalculate with gear
+  renderGearTab();
+  renderStatsTab();
+};
+
 
 };
 
