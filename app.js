@@ -60,13 +60,6 @@ function renderGearTab() {
 
 // Equip handler (attach globally)
 window.equipGear = function (slot, gearId) {
-  if (!gearId) return;
-
-  const gear = gearList.find(g => g.id === gearId);
-  if (!gear) return;
-
-  // Remove from inventory and assign to slot
-  window.equipGear = function (slot, gearId) {
   if (gearId === "") {
     if (currentHero.gear[slot]) {
       currentHero.inventory.push(currentHero.gear[slot]); // return to inventory
@@ -86,6 +79,7 @@ window.equipGear = function (slot, gearId) {
   renderGearTab();
   renderStatsTab();
 };
+
 
 
 
