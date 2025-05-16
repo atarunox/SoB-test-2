@@ -10,11 +10,13 @@
 
 .stats-grid span { font-weight: bold; }
 
-/* --- Grit Bubbles / Corruption Dots --- */ .grit-bubbles { display: flex; gap: 0.3rem; margin-top: 0.25rem; }
+/* --- Grit, Initiative, Corruption Tiles --- */ .quick-stats { display: flex; gap: 1rem; justify-content: space-evenly; margin-bottom: 1rem; flex-wrap: wrap; }
 
-.grit-bubbles span { width: 14px; height: 14px; border-radius: 50%; border: 1px solid #333; background-color: #fff; display: inline-block; }
+.quick-tile { background: #f4e6c1; border: 1px solid #988464; border-radius: 6px; padding: 0.5rem 0.75rem; width: 100px; text-align: center; box-shadow: 1px 1px 3px rgba(0,0,0,0.15); }
 
-.grit-bubbles span.filled { background-color: #333; }
+.quick-tile .label { font-weight: bold; font-size: 0.95rem; margin-bottom: 0.25rem; }
+
+.quick-tile .value { font-size: 1.1rem; font-weight: bold; }
 
 /* --- Side-by-Side Vitals Layout --- */ .vitals-group { padding: 0; box-shadow: none; background: none; }
 
@@ -26,5 +28,9 @@
 
 /* --- Responsive Behavior --- */ @media (max-width: 600px) { .character-sheet-grid { grid-template-columns: 1fr; }
 
-.vital-pair { flex-direction: column; } }
+.vital-pair { flex-direction: column; }
+
+.quick-stats { flex-direction: column; align-items: center; }
+
+.quick-tile { width: 80%; } }
 
