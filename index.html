@@ -16,8 +16,9 @@
   <div id="gearTab" class="tab-content" style="display:none;"></div>
   <div id="sheetTab" class="tab-content" style="display:none;"></div>
   <div id="miscTab" class="tab-content" style="display:none;"></div>
-  <script src="HEROES.js"></script>
-  <script src="gearList.js"></script>
-  <script src="app.js"></script>
+  <!-- Load HEROES and gearList before app.js -->
+<script src="HEROES.js" defer></script>
+<script src="gearList.js" defer></script>
+<script src="app.js" defer></script>
 </body>
 </html>
