@@ -1,4 +1,4 @@
-import { gearList } from './gearList.js';
+const gearList = window.gearList;
 
 let currentHero = null;
 let selectedHeroName = "";
