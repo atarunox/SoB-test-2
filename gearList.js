@@ -1,4 +1,4 @@
-export const gearList = [
+window.gearList = [
   { id: "sturdy_hat", name: "Sturdy Hat", slot: "Head", effects: { Defense: 1 } },
   { id: "tinker_goggles", name: "Tinker’s Goggles", slot: "Head", effects: { Lore: 1, Cunning: 1 } },
 
