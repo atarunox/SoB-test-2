@@ -60,11 +60,7 @@ function renderGearTab() {
   const gearSlots = ["Head", "Torso", "Coat", "Gloves", "Hands", "Pants", "Feet", "Shoulders", "Face", "Extra 1", "Extra 2"];
 
   tab.innerHTML = `
-    <div class="quick-stats">
-      <div class="quick-tile"><div class="label">Grit</div><div class="value">${currentStats.Grit}</div></div>
-      <div class="quick-tile"><div class="label">Initiative</div><div class="value">${currentStats.Initiative}</div></div>
-      <div class="quick-tile"><div class="label">Corruption</div><div class="value">${currentHero.corruption ?? 0}+</div></div>
-    </div>
+    
 
     <h2>Equipped Gear</h2>
     <div class="gear-grid">
@@ -145,7 +141,15 @@ function renderSheetTab() {
         </div>
       `)}
 
-      ${renderDraggableSection("Stats", `
+      ${renderDraggableSection("Combat Stats", `
+  <div class="quick-stats" style="margin-bottom: 0;">
+    <div class="quick-tile small-tile"><div class="label">Grit</div><div class="value">${currentStats.Grit}</div></div>
+    <div class="quick-tile small-tile"><div class="label">Initiative</div><div class="value">${currentStats.Initiative}</div></div>
+    <div class="quick-tile small-tile"><div class="label">Corruption</div><div class="value">${currentHero.corruption ?? 0}+</div></div>
+  </div>
+`)}
+
+${renderDraggableSection("Stats", `
         <div class='tile-content stats-grid'>
           ${Object.entries(hero.stats).map(([key, val]) => `<p>${key} <span>${val}</span></p>`).join("")}
           <p>Corruption <span>${hero.corruption ?? 0}+</span></p>
