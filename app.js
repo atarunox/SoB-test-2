@@ -41,7 +41,7 @@ function renderSheetTab() { const tab = document.getElementById("sheetTab"); con
 
 const statTiles = ["Health", "Sanity", "Defense", "Willpower", "Initiative", "Grit", "Corruption"];
 
-tab.innerHTML = <div class="character-sheet-grid" id="sheetSections" ondragover="event.preventDefault()"> ${statTiles.map(stat => { const value = stat === "Corruption" ?${hero.corruption ?? 0}+:<span class="stat-breakdown" data-stat="${stat}">${currentStats[stat]}</span>; return renderDraggableSection(stat, <div class='tile-content'><p><strong>${value}</strong></p></div>); }).join("")} </div> ;
+tab.innerHTML = <div class="character-sheet-grid" id="sheetSections" ondragover="event.preventDefault()"> ${statTiles.map(stat => { let value = stat === "Corruption" ?${hero.corruption ?? 0}+:<span class="stat-breakdown" data-stat="${stat}">${currentStats[stat] ?? "—"}</span>; return renderDraggableSection(stat, <div class='tile-content'><p><strong>${value}</strong></p></div>); }).join("")} </div> ;
 
 hero.currHealth = hero.currHealth ?? hero.health; hero.currSanity = hero.currSanity ?? hero.sanity;
 
@@ -69,7 +69,7 @@ el.addEventListener('touchend', () => clearTimeout(pressTimer));
 
 }); }
 
-// --- Page Initialization --- document.addEventListener("DOMContentLoaded", () => { const header = document.querySelector("h1"); if (header && !header.innerHTML.includes("v0.1.15")) { header.innerHTML += " (v0.1.15)"; }
+// --- Initialization --- document.addEventListener("DOMContentLoaded", () => { const header = document.querySelector("h1"); if (header && !header.innerHTML.includes("v0.1.15")) { header.innerHTML += " (v0.1.15)"; }
 
 document.querySelectorAll(".tabs button").forEach(btn => { btn.addEventListener("click", () => showTab(btn.dataset.tab)); });
 
