@@ -112,91 +112,51 @@ window.equipGear = function (slot, gearId) {
   renderStatsTab();
 };
 
-function renderSheetTab() {
-  const tab = document.getElementById("sheetTab");
-  const hero = currentHero;
-  if (!hero) {
-    tab.innerHTML = "<p>No hero selected.</p>";
-    return;
-  }
+function renderSheetTab() { const tab = document.getElementById("sheetTab"); const hero = currentHero; if (!hero) { tab.innerHTML = "<p>No hero selected.</p>"; return; }
 
-  tab.innerHTML = `
-    <div class="character-sheet-grid" id="sheetSections" ondragover="event.preventDefault()">
-      ${renderDraggableSection("Vitals", `
-        <div class="tile-content vitals-group">
-          <div class="vital-pair">
-            <div class="vital-box">
-              <div class="tile-header">Health</div>
-              <p><strong>${hero.currHealth ?? hero.health}/${hero.health}</strong></p>
-              <div class="tile-header">Defense</div>
-              <p><strong>${hero.defense}</strong></p>
-            </div>
-            <div class="vital-box">
-              <div class="tile-header">Sanity</div>
-              <p><strong>${hero.currSanity ?? hero.sanity}/${hero.sanity}</strong></p>
-              <div class="tile-header">Willpower</div>
-              <p><strong>${hero.willpower}</strong></p>
-            </div>
-          </div>
-        </div>
-      `)}
+tab.innerHTML = <div class="character-sheet-grid" id="sheetSections" ondragover="event.preventDefault()"> ${renderDraggableSection("Health", <div class='tile-content'> <p><strong>${hero.currHealth ?? hero.health}/${hero.health}</strong></p> </div> `)}
 
-      ${renderDraggableSection("Combat Stats", `
-  <div class="quick-stats" style="margin-bottom: 0;">
-    <div class="quick-tile small-tile"><div class="label">Grit</div><div class="value">${currentStats.Grit}</div></div>
-    <div class="quick-tile small-tile"><div class="label">Initiative</div><div class="value">${currentStats.Initiative}</div></div>
-    <div class="quick-tile small-tile"><div class="label">Corruption</div><div class="value">${currentHero.corruption ?? 0}+</div></div>
-  </div>
-`)}
-
-${renderDraggableSection("Stats", `
-        <div class='tile-content stats-grid'>
-          ${Object.entries(hero.stats).map(([key, val]) => `<p>${key} <span>${val}</span></p>`).join("")}
-          <p>Corruption <span>${hero.corruption ?? 0}+</span></p>
-    
-        </div>
-      `)}
-
-      ${renderDraggableSection("Combat", `
-        <div class='tile-content stats-grid'>
-          <p>Ranged To Hit <span>${hero.toHit?.ranged ?? "—"}</span></p>
-          <p>Melee To Hit<span>${hero.toHit?.melee ?? "—"}</span></p>
-         
-        </div>
-      `)}
-
-      ${renderDraggableSection("Conditions", `
-        <div class='tile-content'>
-          <p><strong>Fungus Growth</strong></p>
-          <p>You get Plump Fungus Side Bag Token at the start of each Adventure.</p>
-        </div>
-      `)}
-
-      ${renderDraggableSection("XP & Gold", `
-        <div class='tile-content stats-grid'>
-          <p>XP <span>${hero.xp ?? 15000}</span></p>
-          <p>Gold <span>${hero.gold ?? 350}</span></p>
-          <p>Dark Stone <span>${hero.darkstone ?? 0}</span></p>
-        </div>
-      `)}
-
-      ${renderDraggableSection("Abilities", `
-        <div class='tile-content'>
-          <ul>${hero.abilities.map(a => `<li>${a}</li>`).join("")}</ul>
-        </div>
-      `)}
-
-      ${renderDraggableSection("Starting Gear", `
-        <div class='tile-content'>
-          <ul>${hero.items.map(i => `<li>${i}</li>`).join("")}</ul>
-        </div>
-      `)}
+${renderDraggableSection("Sanity", `
+    <div class='tile-content'>
+      <p><strong>${hero.currSanity ?? hero.sanity}/${hero.sanity}</strong></p>
     </div>
-  `;
+  `)}
 
-  hero.currHealth = hero.currHealth ?? hero.health;
-  hero.currSanity = hero.currSanity ?? hero.sanity;
-}
+  ${renderDraggableSection("Defense", `
+    <div class='tile-content'>
+      <p><strong>${hero.defense}</strong></p>
+    </div>
+  `)}
+
+  ${renderDraggableSection("Willpower", `
+    <div class='tile-content'>
+      <p><strong>${hero.willpower}</strong></p>
+    </div>
+  `)}
+
+  ${renderDraggableSection("Initiative", `
+    <div class='tile-content'>
+      <p><strong>${currentStats.Initiative}</strong></p>
+    </div>
+  `)}
+
+  ${renderDraggableSection("Grit", `
+    <div class='tile-content'>
+      <p><strong>${currentStats.Grit}</strong></p>
+    </div>
+  `)}
+
+  ${renderDraggableSection("Corruption", `
+    <div class='tile-content'>
+      <p><strong>${hero.corruption ?? 0}+</strong></p>
+    </div>
+  `)}
+</div>
+
+`;
+
+hero.currHealth = hero.currHealth ?? hero.health; hero.currSanity = hero.currSanity ?? hero.sanity; }
+
 
 function renderDraggableSection(title, content) {
   return `
