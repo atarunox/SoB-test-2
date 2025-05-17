@@ -153,15 +153,15 @@ ${renderDraggableSection("Stats", `
         <div class='tile-content stats-grid'>
           ${Object.entries(hero.stats).map(([key, val]) => `<p>${key} <span>${val}</span></p>`).join("")}
           <p>Corruption <span>${hero.corruption ?? 0}+</span></p>
-          <p>Dark Stone <span>${hero.darkstone ?? 0}</span></p>
+    
         </div>
       `)}
 
       ${renderDraggableSection("Combat", `
         <div class='tile-content stats-grid'>
-          <p>To Hit <span>${hero.toHit?.ranged ?? "—"}</span></p>
-          <p>Melee <span>${hero.toHit?.melee ?? "—"}</span></p>
-          <p>Ranged <span>${hero.stats?.Agility ?? "—"}</span></p>
+          <p>Ranged To Hit <span>${hero.toHit?.ranged ?? "—"}</span></p>
+          <p>Melee To Hit<span>${hero.toHit?.melee ?? "—"}</span></p>
+         
         </div>
       `)}
 
@@ -176,6 +176,7 @@ ${renderDraggableSection("Stats", `
         <div class='tile-content stats-grid'>
           <p>XP <span>${hero.xp ?? 15000}</span></p>
           <p>Gold <span>${hero.gold ?? 350}</span></p>
+          <p>Dark Stone <span>${hero.darkstone ?? 0}</span></p>
         </div>
       `)}
 
