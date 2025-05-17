@@ -16,7 +16,7 @@
 
 .quick-tile.small-tile {
   padding: 0.3rem 0.5rem;
-  width: 40px;
+  width: 80px;
   font-size: 0.85rem;
 }
 .quick-tile.small-tile .value {
