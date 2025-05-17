@@ -1,30 +1,20 @@
-/* --- Character Sheet Grid Layout --- */ .character-sheet-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; padding: 1rem; background: url('https://www.transparenttextures.com/patterns/paper-fibers.png') repeat #f6edd9; border-radius: 12px; font-family: Georgia, serif; box-sizing: border-box; }
+/* --- Hidden Utility Class (for collapsible panels) --- */
+.hidden {
+  display: none;
+}
 
-.tile { background: #f4e6c1; border: 1px solid #988464; border-radius: 6px; box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2); padding: 0.75em 1em; position: relative; user-select: none; }
+/* --- Gear Grid Styles --- */
+.gear-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
 
-.tile-header { font-weight: bold; font-size: 1.1em; border-bottom: 1px solid #a29074; padding-bottom: 0.3em; margin-bottom: 0.5em; letter-spacing: 0.5px; }
-
-.tile-content p, .tile-content li { margin: 0.25em 0; font-size: 1em; }
-
-.stats-grid p { display: flex; justify-content: space-between; border-bottom: 1px solid #d2c4aa; }
-
-.stats-grid span { font-weight: bold; }
-
-/* Tooltip for breakdown */ .tile[data-breakdown]::after { content: attr(data-breakdown); position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%); background: #333; color: #fff; padding: 5px 8px; border-radius: 4px; font-size: 0.8rem; white-space: pre-line; opacity: 0; pointer-events: none; transition: opacity 0.3s; z-index: 10; }
-
-.tile.show-tooltip::after { opacity: 1; }
-
-/* Responsive Behavior */ @media (max-width: 600px) { .character-sheet-grid { grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); padding: 0.5rem; gap: 0.5rem; }
-
-.tile { font-size: 0.9rem; padding: 0.5rem; }
-
-.tile .tile-header { font-size: 1rem; }
-
-.tile .tile-value { font-size: 1.1rem; } }
-
-/* Optional gear grid styles */ .gear-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 0.5rem; margin-top: 1rem; }
-
-.gear-slot { background: #fffbe6; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px; box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1); }
-
-.gear-slot label { display: block; margin-bottom: 0.25rem; font-weight: bold; }
-
+.gear-slot {
+  background: #f4e6c1;
+  border: 1px solid #988464;
+  border-radius: 6px;
+  padding: 0.5rem;
+  box-shadow: 1px 1px 3px rgba(0,0,0,0.1);
+}
