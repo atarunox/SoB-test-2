@@ -1,18 +1,16 @@
-// --- Imports --- import { gearList } from './gearList.js';
+// app.js import { gearList } from './gearList.js';
 
-// --- Global State --- let currentHero = null; let selectedHeroName = ""; let currentStats = {};
+let currentHero = null; let selectedHeroName = ""; let currentStats = {};
 
-// --- Stat Calculation --- function calculateCurrentStats(hero) { const base = { ...hero.stats }; const bonuses = {};
+function calculateCurrentStats(hero) { const base = { ...hero.stats }; const bonuses = {};
 
 if (hero.gear) { Object.values(hero.gear).forEach(item => { if (item?.effects) { for (const [key, value] of Object.entries(item.effects)) { bonuses[key] = (bonuses[key] || 0) + value; } } }); }
 
 const result = {}; for (const key of Object.keys(base)) { result[key] = base[key] + (bonuses[key] || 0); }
 
-result.Health = hero.health + (bonuses.Health || 0); result.Sanity = hero.sanity + (bonuses.Sanity || 0); result.Grit = hero.maxGrit + (bonuses.Grit || 0); result.Initiative = base.Initiative + (bonuses.Initiative || 0); result.Defense = hero.defense; result.Willpower = hero.willpower;
+result.Health = hero.health + (bonuses.Health || 0); result.Sanity = hero.sanity + (bonuses.Sanity || 0); result.Grit = hero.maxGrit + (bonuses.Grit || 0); result.Initiative = result.Initiative || hero.stats.Initiative; result.Defense = hero.defense; result.Willpower = hero.willpower;
 
 return result; }
-
-// --- Tab Rendering --- function renderStatsTab() { const tab = document.getElementById("statsTab"); tab.innerHTML = <h2>Stats</h2> <ul> <li>Health: ${currentStats.Health}</li> <li>Sanity: ${currentStats.Sanity}</li> <li>Grit: ${currentStats.Grit}</li> </ul>; }
 
 function renderGearTab() { const tab = document.getElementById("gearTab"); if (!currentHero) { tab.innerHTML = "<p>No hero selected.</p>"; return; }
 
@@ -37,21 +35,41 @@ currentHero.gear[slot] = gear;
 
 }
 
-currentStats = calculateCurrentStats(currentHero); renderGearTab(); renderStatsTab(); renderSheetTab(); };
+currentStats = calculateCurrentStats(currentHero); renderGearTab(); renderSheetTab(); };
 
 function renderSheetTab() { const tab = document.getElementById("sheetTab"); const hero = currentHero; if (!hero) { tab.innerHTML = "<p>No hero selected.</p>"; return; }
 
+const statTiles = ["Health", "Sanity", "Defense", "Willpower", "Initiative", "Grit", "Corruption"];
+
+tab.innerHTML = <div class="character-sheet-grid" id="sheetSections" ondragover="event.preventDefault()"> ${statTiles.map(stat => { const value = stat === "Corruption" ?${hero.corruption ?? 0}+:<span class="stat-breakdown" data-stat="${stat}">${currentStats[stat]}</span>; return renderDraggableSection(stat, <div class='tile-content'><p><strong>${value}</strong></p></div>); }).join("")} </div> ;
+
 hero.currHealth = hero.currHealth ?? hero.health; hero.currSanity = hero.currSanity ?? hero.sanity;
 
-const statBlocks = [ { label: "Health", value: ${hero.currHealth}/${hero.health} }, { label: "Sanity", value: ${hero.currSanity}/${hero.sanity} }, { label: "Defense", value: hero.defense }, { label: "Willpower", value: hero.willpower }, { label: "Initiative", value: currentStats.Initiative }, { label: "Grit", value: currentStats.Grit }, { label: "Corruption", value: ${hero.corruption ?? 0}+ } ];
-
-tab.innerHTML = <div class="character-sheet-grid" id="sheetSections" ondragover="event.preventDefault()"> ${statBlocks.map(stat => renderDraggableSection(stat.label, <div class='tile-content'> <p class='label'>${stat.label}</p> <div class='tile-value'>${stat.value}</div> </div> )).join("")} </div> ; }
+setupStatBreakdownListeners(); }
 
 function renderDraggableSection(title, content) { return <div class="tile stat-tile" draggable="true" ondragstart="event.dataTransfer.setData('text/plain', this.id)" id="section-${title.replace(/\s+/g, '')}" ondrop="const fromId = event.dataTransfer.getData('text/plain'); const fromEl = document.getElementById(fromId); this.parentNode.insertBefore(fromEl, this);"> <div class="tile-header">${title}</div> ${content} </div>; }
 
-// --- Tab Switching --- function showTab(tabName) { document.querySelectorAll(".tab-content").forEach(el => { el.style.display = el.id === tabName ? "block" : "none"; }); }
+function showTab(tabName) { document.querySelectorAll(".tab-content").forEach(el => { el.style.display = el.id === tabName ? "block" : "none"; }); }
 
-// --- Initialization --- document.addEventListener("DOMContentLoaded", () => { const header = document.querySelector("h1"); if (header && !header.innerHTML.includes("v0.1.15")) { header.innerHTML += " (v0.1.15)"; }
+function setupStatBreakdownListeners() { let pressTimer = null;
+
+document.querySelectorAll('.stat-breakdown').forEach(el => { const stat = el.dataset.stat; const showBreakdown = () => { const base = currentHero.stats?.[stat] ?? 0; const gearBonus = Object.values(currentHero.gear || {}).reduce((sum, item) => sum + (item?.effects?.[stat] || 0), 0); const total = base + gearBonus; alert(${stat} = ${base} (base) + ${gearBonus} (gear)\nTotal: ${total}); };
+
+el.addEventListener('mousedown', e => {
+  e.preventDefault();
+  pressTimer = setTimeout(showBreakdown, 600);
+});
+el.addEventListener('mouseup', () => clearTimeout(pressTimer));
+el.addEventListener('mouseleave', () => clearTimeout(pressTimer));
+
+el.addEventListener('touchstart', e => {
+  pressTimer = setTimeout(showBreakdown, 600);
+});
+el.addEventListener('touchend', () => clearTimeout(pressTimer));
+
+}); }
+
+// --- Page Initialization --- document.addEventListener("DOMContentLoaded", () => { const header = document.querySelector("h1"); if (header && !header.innerHTML.includes("v0.1.15")) { header.innerHTML += " (v0.1.15)"; }
 
 document.querySelectorAll(".tabs button").forEach(btn => { btn.addEventListener("click", () => showTab(btn.dataset.tab)); });
 
@@ -67,7 +85,7 @@ heroSelect.addEventListener("change", e => {
       currentHero = hero;
       hero.inventory = gearList.filter(g => g.id.startsWith("test_"));
       currentStats = calculateCurrentStats(hero);
-      renderStatsTab();
+
       renderSheetTab();
       renderGearTab();
       showTab("sheetTab");
@@ -75,9 +93,8 @@ heroSelect.addEventListener("change", e => {
   });
 }
 
-renderStatsTab();
-renderGearTab();
 renderSheetTab();
+renderGearTab();
 showTab("sheetTab");
 
 }); });
