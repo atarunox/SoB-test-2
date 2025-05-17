@@ -95,33 +95,58 @@ window.equipGear = function (slot, gearId) {
   renderSheetTab();
 };
 
-function renderSheetTab() {
-  const tab = document.getElementById("sheetTab");
-  const hero = currentHero;
-  if (!hero) {
-    tab.innerHTML = "<p>No hero selected.</p>";
-    return;
-  }
+function renderSheetTab() { const tab = document.getElementById("sheetTab"); const hero = currentHero; if (!hero) { tab.innerHTML = "<p>No hero selected.</p>"; return; }
 
-  const statTiles = ["Health", "Sanity", "Defense", "Willpower", "Initiative", "Grit", "Corruption"];
+const statTiles = ["Health", "Sanity", "Defense", "Willpower", "Initiative", "Grit", "Corruption"];
 
-  tab.innerHTML = `
-    <div class="character-sheet-grid" id="sheetSections" ondragover="event.preventDefault()">
-      ${statTiles.map(stat => {
-        const value = stat === "Corruption"
-          ? `${hero.corruption ?? 0}+`
-          : `<span class="stat-breakdown" data-stat="${stat}">${currentStats[stat] ?? "—"}</span>`;
-        return renderDraggableSection(stat, `
-          <div class='tile-content'>
-            <p><strong>${value}</strong></p>
-          </div>
-        `);
-      }).join("")}
+tab.innerHTML = <div class="character-sheet-grid" id="sheetSections" ondragover="event.preventDefault()"> ${statTiles.map(stat => { const value = stat === "Corruption" ?${hero.corruption ?? 0}+:<span class="stat-breakdown" data-stat="${stat}">${currentStats[stat] ?? "—"}</span>; return renderDraggableSection(stat,  <div class='tile-content'> <p><strong>${value}</strong></p> </div> `); }).join("")}
+
+${renderDraggableSection("Stats", `
+    <div class='tile-content stats-grid'>
+      ${Object.entries(hero.stats).map(([key, val]) => `<p>${key} <span>${val}</span></p>`).join("")}
+      <p>Dark Stone <span>${hero.darkstone ?? 0}</span></p>
     </div>
-  `;
+  `)}
 
-  hero.currHealth = hero.currHealth ?? hero.health;
-  hero.currSanity = hero.currSanity ?? hero.sanity;
+  ${renderDraggableSection("Combat", `
+    <div class='tile-content stats-grid'>
+      <p>To Hit <span>${hero.toHit?.ranged ?? "—"}</span></p>
+      <p>Melee <span>${hero.toHit?.melee ?? "—"}</span></p>
+      <p>Ranged <span>${hero.stats?.Agility ?? "—"}</span></p>
+    </div>
+  `)}
+
+  ${renderDraggableSection("Conditions", `
+    <div class='tile-content'>
+      <p><strong>Fungus Growth</strong></p>
+      <p>You get Plump Fungus Side Bag Token at the start of each Adventure.</p>
+    </div>
+  `)}
+
+  ${renderDraggableSection("XP & Gold", `
+    <div class='tile-content stats-grid'>
+      <p>XP <span>${hero.xp ?? 15000}</span></p>
+      <p>Gold <span>${hero.gold ?? 350}</span></p>
+    </div>
+  `)}
+
+  ${renderDraggableSection("Abilities", `
+    <div class='tile-content'>
+      <ul>${hero.abilities.map(a => `<li>${a}</li>`).join("")}</ul>
+    </div>
+  `)}
+
+  ${renderDraggableSection("Starting Gear", `
+    <div class='tile-content'>
+      <ul>${hero.items.map(i => `<li>${i}</li>`).join("")}</ul>
+    </div>
+  `)}
+</div>
+
+`;
+
+hero.currHealth = hero.currHealth ?? hero.health; hero.currSanity = hero.currSanity ?? hero.sanity; setupStatBreakdownListeners(); }
+
 
   setupStatBreakdownListeners();
 }
