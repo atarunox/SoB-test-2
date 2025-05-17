@@ -1,8 +1,26 @@
-const gearList = window.gearList;
+import { gearList } from './gearList.js';
 
 let currentHero = null;
 let selectedHeroName = "";
 let currentStats = {};
+let customGearList = [];
+
+// --- Library Data ---
+const libraryData = {
+  "Side Bag Tokens": [
+    { name: "Bandages", description: "Heal 1D6 Health. Discard after use." },
+    { name: "Whiskey", description: "Recover 1D6 Sanity. Discard after use." },
+    { name: "Dynamite", description: "Throw to hit all enemies in a space for 3D6 damage (1x use)." },
+    { name: "Flash Bang", description: "Enemies in space are -1 Defense until end of next turn." },
+    { name: "Lantern Oil", description: "Recharge Lantern. Required after rolling a 1 on Lantern roll." }
+  ],
+  "Status Effects": [
+    { name: "Bleeding", description: "Lose 1 Health at end of each turn until bandaged." },
+    { name: "Poisoned", description: "Roll a D6 each turn. On 1, take 1 damage. Ends on 6+." },
+    { name: "Stunned", description: "Lose 1 Action and -1 Initiative next turn." },
+    { name: "Burning", description: "Take 1D6 Fire Damage at end of each turn. Ends on 4+." }
+  ]
+};
 
 function calculateCurrentStats(hero) {
   const base = { ...hero.stats };
@@ -82,7 +100,7 @@ window.equipGear = function (slot, gearId) {
       delete currentHero.gear[slot];
     }
   } else {
-    const gear = gearList.find(g => g.id === gearId);
+    const gear = [...gearList, ...customGearList].find(g => g.id === gearId);
     if (!gear) return;
 
     currentHero.inventory = currentHero.inventory.filter(g => g.id !== gearId);
@@ -94,62 +112,6 @@ window.equipGear = function (slot, gearId) {
   renderGearTab();
   renderSheetTab();
 };
-
-function renderSheetTab() { const tab = document.getElementById("sheetTab"); const hero = currentHero; if (!hero) { tab.innerHTML = "<p>No hero selected.</p>"; return; }
-
-const statTiles = ["Health", "Sanity", "Defense", "Willpower", "Initiative", "Grit", "Corruption"];
-
-tab.innerHTML = <div class="character-sheet-grid" id="sheetSections" ondragover="event.preventDefault()"> ${statTiles.map(stat => { const value = stat === "Corruption" ?${hero.corruption ?? 0}+:<span class="stat-breakdown" data-stat="${stat}">${currentStats[stat] ?? "—"}</span>; return renderDraggableSection(stat,  <div class='tile-content'> <p><strong>${value}</strong></p> </div> `); }).join("")}
-
-${renderDraggableSection("Stats", `
-    <div class='tile-content stats-grid'>
-      ${Object.entries(hero.stats).map(([key, val]) => `<p>${key} <span>${val}</span></p>`).join("")}
-      <p>Dark Stone <span>${hero.darkstone ?? 0}</span></p>
-    </div>
-  `)}
-
-  ${renderDraggableSection("Combat", `
-    <div class='tile-content stats-grid'>
-      <p>To Hit <span>${hero.toHit?.ranged ?? "—"}</span></p>
-      <p>Melee <span>${hero.toHit?.melee ?? "—"}</span></p>
-      <p>Ranged <span>${hero.stats?.Agility ?? "—"}</span></p>
-    </div>
-  `)}
-
-  ${renderDraggableSection("Conditions", `
-    <div class='tile-content'>
-      <p><strong>Fungus Growth</strong></p>
-      <p>You get Plump Fungus Side Bag Token at the start of each Adventure.</p>
-    </div>
-  `)}
-
-  ${renderDraggableSection("XP & Gold", `
-    <div class='tile-content stats-grid'>
-      <p>XP <span>${hero.xp ?? 15000}</span></p>
-      <p>Gold <span>${hero.gold ?? 350}</span></p>
-    </div>
-  `)}
-
-  ${renderDraggableSection("Abilities", `
-    <div class='tile-content'>
-      <ul>${hero.abilities.map(a => `<li>${a}</li>`).join("")}</ul>
-    </div>
-  `)}
-
-  ${renderDraggableSection("Starting Gear", `
-    <div class='tile-content'>
-      <ul>${hero.items.map(i => `<li>${i}</li>`).join("")}</ul>
-    </div>
-  `)}
-</div>
-
-`;
-
-hero.currHealth = hero.currHealth ?? hero.health; hero.currSanity = hero.currSanity ?? hero.sanity; setupStatBreakdownListeners(); }
-
-
-  setupStatBreakdownListeners();
-}
 
 function renderDraggableSection(title, content) {
   return `
@@ -165,19 +127,43 @@ function renderDraggableSection(title, content) {
   `;
 }
 
+function renderSheetTab() {
+  const tab = document.getElementById("sheetTab");
+  if (!currentHero) {
+    tab.innerHTML = "<p>No hero selected.</p>";
+    return;
+  }
+
+  const statTiles = ["Health", "Sanity", "Defense", "Willpower", "Initiative", "Grit", "Corruption"];
+
+  tab.innerHTML = `
+    <div class="character-sheet-grid" id="sheetSections" ondragover="event.preventDefault()">
+      ${statTiles.map(stat => {
+        const value = stat === "Corruption"
+          ? \`\${currentHero.corruption ?? 0}+\`
+          : \`<span class="stat-breakdown" data-stat="\${stat}">\${currentStats[stat] ?? "—"}</span>\`;
+        return renderDraggableSection(stat, \`
+          <div class='tile-content'><p><strong>\${value}</strong></p></div>
+        \`);
+      }).join("")}
+    </div>
+  `;
+
+  setupStatBreakdownListeners();
+}
+
 function setupStatBreakdownListeners() {
   let pressTimer = null;
 
   document.querySelectorAll('.stat-breakdown').forEach(el => {
     const stat = el.dataset.stat;
-
     const showBreakdown = () => {
       const base = currentHero.stats?.[stat] ?? 0;
       const gearBonus = Object.values(currentHero.gear || {}).reduce(
         (sum, item) => sum + (item?.effects?.[stat] || 0), 0
       );
       const total = base + gearBonus;
-      alert(`${stat} = ${base} (base) + ${gearBonus} (gear)\nTotal: ${total}`);
+      alert(\`\${stat} = \${base} (base) + \${gearBonus} (gear)\nTotal: \${total}\`);
     };
 
     el.addEventListener('mousedown', e => {
@@ -191,6 +177,27 @@ function setupStatBreakdownListeners() {
     });
     el.addEventListener('touchend', () => clearTimeout(pressTimer));
   });
+}
+
+function renderLibrarySection(data) {
+  return Object.entries(data).map(([category, entries]) => `
+    <div class="panel">
+      <h3 onclick="this.nextElementSibling.classList.toggle('hidden')">${category}</h3>
+      <ul class="hidden">
+        ${entries.map(entry => `<li><strong>${entry.name}</strong>: ${entry.description}</li>`).join("")}
+      </ul>
+    </div>
+  `).join("");
+}
+
+function renderMiscTab() {
+  const tab = document.getElementById("miscTab");
+  tab.innerHTML = `
+    <h2>Custom Gear (Coming Soon)</h2>
+    <p>Form for creating custom gear will go here.</p>
+    <h2>Library</h2>
+    ${renderLibrarySection(libraryData)}
+  `;
 }
 
 function showTab(tabName) {
@@ -237,6 +244,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
           renderSheetTab();
           renderGearTab();
+          renderMiscTab();
           showTab("sheetTab");
         }
       });
@@ -244,6 +252,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     renderSheetTab();
     renderGearTab();
+    renderMiscTab();
     showTab("sheetTab");
   });
 });

@@ -7,27 +7,17 @@
 </head>
 <body>
   <h1>Hero Tracker</h1>
-  <select id="heroSelect">
-    <option>Loading...</option>
-  </select>
-
+  <select id="heroSelect"><option>Loading...</option></select>
   <div class="tabs">
-    <!-- Removed Stats Tab -->
     <button data-tab="gearTab">Gear</button>
-    <button data-tab="conditionsTab">Conditions</button>
-    <button data-tab="treeTab">Skill Tree</button>
     <button data-tab="sheetTab">Character Sheet</button>
+    <button data-tab="miscTab">Misc</button>
   </div>
-
-  <!-- Tabs -->
   <div id="gearTab" class="tab-content" style="display:none;"></div>
-  <div id="conditionsTab" class="tab-content" style="display:none;"></div>
-  <div id="treeTab" class="tab-content" style="display:none;"></div>
   <div id="sheetTab" class="tab-content" style="display:none;"></div>
-
-  <!-- Load order: HEROES first, then app -->
-<script src="gearList.js"></script>
-<script src="HEROES.js"></script>
-<script src="app.js"></script>
+  <div id="miscTab" class="tab-content" style="display:none;"></div>
+  <script src="HEROES.js"></script>
+  <script src="gearList.js"></script>
+  <script src="app.js"></script>
 </body>
 </html>
